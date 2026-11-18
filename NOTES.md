@@ -46,7 +46,7 @@ only allow `fetch()` when the page comes from a **server**:
 | `shelf.html`, `about.html` | My Shelf and About (Step 6). |
 | `css/style.css` | The **design system**. Section 1 holds the **design tokens** (colours, fonts, corner sizes). Change a token → the whole site changes. |
 | `js/app.js` | The **shared engine**, loaded on every page. Builds the menu, loads JSON data, adds the footer, runs the fade-in. |
-| `js/home.js` | Code only for the home page: fills the bento cards. Settings at the top (`FEATURED_AUTHOR_ID`, `NEW_RESOURCES_COUNT`). |
+| `js/home.js` | Code only for the home page: fills the bento cards. Settings at the top (`FEATURED_AUTHOR_ID`, `FEATURED_BOOK_ID`, `NEW_RESOURCES_COUNT`). |
 | `js/library.js` | Library: fills the filter menus from the data, filters the books, shows shelves or grid. |
 | `js/book.js` | Book page: reads `?id=` from the address and builds the page for that one book. |
 | `js/authors.js`, `js/author.js` | All authors / one author (same idea as the book page). |
@@ -124,9 +124,9 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 | Featured author | The author whose id is in `FEATURED_AUTHOR_ID`. Portrait if `portrait` is filled, otherwise an initials card. |
 | Quote of the day | A different quote from `quotes.json` each day, in order, then starts again. |
 | Continue watching | Episodes you **saved** that are not marked as watched. |
-| New resources | The **last 3** records in `resources.json` (add new ones at the end!). |
+| Featured book *(added 18 Nov, replaced "New resources")* | The book whose id is in `FEATURED_BOOK_ID`. Shows its CSS cover, title, author, year, era, subjects, its episodes and the buttons Open book / Read it free / Save. |
 | Your study week | Days you opened the site this week (remembered in `localStorage`). |
-| Quick search | Before typing: the 3 newest resources. While typing: results from books, authors, episodes and resources. **Suggestion chips** (galvanism, Mary Shelley…) type their words into the box; click again to clear. To change the chips, edit the `<button class="chip" data-query="…">` lines in `index.html`. |
+| Quick search | Before typing: the 3 newest resources (the **last 3** records in `resources.json`, so add new ones at the end!). While typing: results from books, authors, episodes and resources. **Suggestion chips** (galvanism, Mary Shelley…) type their words into the box; click again to clear. To change the chips, edit the `<button class="chip" data-query="…">` lines in `index.html`. |
 | Hero picture | Fixed in `index.html` (for now our public-domain Mary Shelley portrait, in an arched frame). To swap it: change `src`, `alt` and the caption. Missing file → paper texture. |
 
 **New shared tools in `app.js`** (later pages reuse them)
@@ -280,6 +280,29 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 
 ---
 
+## Update 18 Nov: Featured book on Home
+
+**What changed**
+- The wide card at the bottom of Home is now **Featured book** (our decision "A"). It replaced "New resources", which showed the same 3 resources as the Quick search card.
+- The newest resources are still on Home: in the Quick search card, before you type.
+- Checked: the **About** page has all six "Why listen?" points from v1 (short and clear, two subjects at once, full transcripts, real sources, fresh ideas, free anytime).
+
+**How the Featured book card works** (`showFeaturedBook()` in `js/home.js`)
+1. Reads `FEATURED_BOOK_ID` (now `'frankenstein'`) and finds that book with `findById()`.
+2. Finds the author through the book's `author` id, like the book page does.
+3. Draws the cover with `coverHTML()`, the same building block as the Library, so the cover looks the same everywhere.
+4. Subject tags are links to `library.html?subject=…`.
+5. Episodes come from `episodesForBook()`. "Coming soon" episodes are skipped.
+6. "Read it free" only appears if `freeText` is a real link (public-domain books only).
+7. The summary is hidden while it still says `TODO`. When we write it in `books.json`, it appears here by itself.
+
+**Layout**: laptop = 3 columns (cover | info | episodes); tablet = episodes move under the cover; phone = everything stacked.
+
+**Our notes (write here)**
+-
+
+---
+
 ## Images: how to swap in our photos
 
 **Rule:** we never download images from the internet. Where we have no image yet, the site shows a **designed placeholder** made only with CSS. When a photo is ready, we change **one line**, and the placeholder is replaced. If we make a typo in the path, the placeholder comes back (never a broken-image icon).
@@ -359,7 +382,8 @@ The judges will probably ask "How does it work?" Each task proves we can answer.
 - [ ] **Step 2:** In `js/home.js`, set `FEATURED_AUTHOR_ID` to `'daniel-keyes'`. Why does an initials card appear instead of a portrait? What happens with `'mark-twain'`?
 - [ ] **Step 3:** Add one real book to `data/books.json` (copy a `{ … }` record, give it a new unique `id`, `"candidate": true`, an `author` id that exists in `authors.json`). Before checking, predict the 5+ places it will appear.
 - [ ] **Step 4:** Add a 4th multiple-choice question to Episode 1's `"quiz"`, based on our real research. Remember: `"answer": 0` = the FIRST option. Test that the green answer is the right one.
-- [ ] **Step 5:** Add one real resource to the END of `data/resources.json`, with a link we opened and checked. Then check: is it first in "New resources" on Home? Is its APA citation correct?
+- [ ] **Step 5:** Add one real resource to the END of `data/resources.json`, with a link we opened and checked. Then check: is it first under "Newest resources" in the Quick search card on Home? Is its APA citation correct?
+- [ ] **Home update:** In `js/home.js`, set `FEATURED_BOOK_ID` to `'flowers-for-algernon'`. What changes on the card (cover colour, subjects, episode)? Why is there no "Read it free" button now? (Hint: look at `freeText` in `books.json`.)
 - [ ] **Step 6:** Each of us writes a real review of *Frankenstein* (or *Flowers for Algernon*) in `data/reviews.json`. Check the stars and average on the book page. 
 
 ### Before the fair (checklist)

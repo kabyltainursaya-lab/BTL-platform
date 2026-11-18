@@ -12,7 +12,7 @@
      3. Featured author
      4. Quote of the day
      5. Continue watching
-     6. New resources
+     6. Featured book
      7. Your study week
      8. Quick search
      9. Start
@@ -27,7 +27,11 @@
 // Use an "id" from data/authors.json.
 const FEATURED_AUTHOR_ID = 'mary-shelley';
 
-// How many resources to show in "New resources"
+// Which book is featured in the wide card at the bottom?
+// Use an "id" from data/books.json.
+const FEATURED_BOOK_ID = 'frankenstein';
+
+// How many resources the Quick search card shows before you type
 const NEW_RESOURCES_COUNT = 3;
 
 
@@ -183,21 +187,79 @@ function showContinueWatching(data) {
 
 
 /* -------------------------------------------------------------
-   6. NEW RESOURCES
-   "New" = the LAST records in data/resources.json, so a
-   resource you add at the end of the file appears here first.
+   6. FEATURED BOOK
+   One book from data/books.json, chosen with FEATURED_BOOK_ID.
+   Shows: CSS cover, title, author, year, era, subjects,
+   its episode(s), and buttons (Open book, Read it free, Save).
    ------------------------------------------------------------- */
-function showNewResources(data) {
-  const box = document.getElementById('new-resources');
-  const newest = data.resources.slice(-NEW_RESOURCES_COUNT).reverse();   // last 3, newest first
-
-  if (newest.length === 0) {
-    box.innerHTML = '<p class="meta">No resources yet.</p>';
+function showFeaturedBook(data) {
+  const box = document.getElementById('featured-book');
+  const book = findById(data.books, FEATURED_BOOK_ID);
+  if (!book) {
+    box.innerHTML = '<p class="notice">No book with the id “' + escapeHTML(FEATURED_BOOK_ID) + '”. Check FEATURED_BOOK_ID in js/home.js.</p>';
     return;
   }
 
-  // resourceItemHTML is a building block from app.js
-  box.innerHTML = '<ul class="mini-list resource-list">' + newest.map(resourceItemHTML).join('') + '</ul>';
+  // Look up the author by id (the same way the book page does)
+  const author = findById(data.authors, book.author);
+  const authorName = author ? author.name : '';
+  const authorLink = author
+    ? '<a href="' + pageUrl('authors', author.id) + '">' + escapeHTML(author.name) + '</a>'
+    : '';
+
+  // Year, plus the extra note if there is one: "1818 (revised edition 1831)"
+  const year = book.year + (book.yearNote ? ' (' + escapeHTML(book.yearNote) + ')' : '');
+
+  // Subject tags: each one opens the library filtered by that subject
+  const subjects = book.subjects.map(function (s) {
+    return '<a class="tag tag-cream tag-link" href="library.html?subject=' + encodeURIComponent(s) + '">' + escapeHTML(s) + '</a>';
+  }).join('');
+
+  // Linked episodes (episodesForBook is in app.js; it skips "coming soon" ones)
+  const episodes = episodesForBook(data, book.id);
+  const episodeList = episodes.length
+    ? '<ul class="mini-list">' + episodes.map(function (ep) {
+        return '<li>' +
+          '<span class="row tags-row"><span class="pill">Episode ' + ep.number + '</span>' + statusBadgeHTML(ep.status) + '</span>' +
+          '<a href="' + pageUrl('episodes', ep.id) + '">' + escapeHTML(ep.title) + '</a>' +
+          '<span class="meta">' + escapeHTML(ep.discipline) + '</span>' +
+        '</li>';
+      }).join('') + '</ul>'
+    : '<p class="meta">No episode yet' + (book.candidate ? ': this book is proposed for a future episode.' : '.') + '</p>';
+
+  // "Read it free" only for public-domain books with a real link
+  const freeButton = hasText(book.freeText) && book.freeText.startsWith('http')
+    ? '<a class="btn btn-ghost" href="' + escapeHTML(book.freeText) + '" target="_blank" rel="noopener">Read it free ' + icon('external') + '<span class="visually-hidden"> (opens in a new tab)</span></a>'
+    : '';
+
+  box.innerHTML =
+    '<div class="book-feature">' +
+      // The cover is a link to the book page (hidden from screen readers:
+      // the title link below says the same thing)
+      '<a class="book-feature-cover" href="' + pageUrl('books', book.id) + '" tabindex="-1" aria-hidden="true">' +
+        coverHTML(book, authorName) +
+      '</a>' +
+
+      '<div class="book-feature-info">' +
+        (book.candidate ? '<span class="tag tag-cream">Proposed</span>' : '') +
+        '<h3><a href="' + pageUrl('books', book.id) + '">' + escapeHTML(book.shortTitle) + '</a></h3>' +
+        (book.title !== book.shortTitle ? '<p class="meta"><em>' + escapeHTML(book.title) + '</em></p>' : '') +
+        '<p>' + authorLink + (authorLink ? ' · ' : '') + year + '</p>' +
+        '<p class="meta">' + escapeHTML(book.era) + '</p>' +
+        '<p class="row tags-row">' + subjects + '</p>' +
+        (hasText(book.summary) ? '<p>' + escapeHTML(book.summary) + '</p>' : '') +
+        '<div class="row">' +
+          '<a class="btn btn-dark" href="' + pageUrl('books', book.id) + '">Open book</a>' +
+          freeButton +
+          saveButton('books', book.id) +
+        '</div>' +
+      '</div>' +
+
+      '<div class="book-feature-episodes">' +
+        '<p class="list-label">' + (episodes.length === 1 ? 'Episode' : 'Episodes') + '</p>' +
+        episodeList +
+      '</div>' +
+    '</div>';
 }
 
 
@@ -273,7 +335,7 @@ function showStudyWeek() {
 
 // The 3 newest resources, in a short form (title + type · authors)
 function newestResourcesHTML(data) {
-  const newest = data.resources.slice(-3).reverse();   // the LAST 3 in the file, newest first
+  const newest = data.resources.slice(-NEW_RESOURCES_COUNT).reverse();   // the LAST 3 in the file, newest first
   if (newest.length === 0) return '';
   return '<p class="list-label">Newest resources</p>' +
     '<ul class="mini-list compact-list">' + newest.map(function (res) {
@@ -349,7 +411,7 @@ async function startHome() {
     showFeaturedAuthor(data);
     showQuote(data);
     showContinueWatching(data);
-    showNewResources(data);
+    showFeaturedBook(data);
     setupSearch(data);
     updateSaveButtons();   // give the new Save button its look
 
@@ -358,7 +420,7 @@ async function startHome() {
   } catch (error) {
     showDataError(document.getElementById('home-error'), error);
     // Replace every "Loading…" with a short note
-    ['latest-episode', 'featured-author', 'quote', 'continue-watching', 'new-resources'].forEach(function (id) {
+    ['latest-episode', 'featured-author', 'quote', 'continue-watching', 'featured-book'].forEach(function (id) {
       document.getElementById(id).innerHTML = '<p class="meta">Not available right now.</p>';
     });
   }

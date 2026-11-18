@@ -384,7 +384,7 @@ a:hover { color: var(--burgundy); }
    ┌──────────── hero (4) ────────────┬─ episode (2) ─┐
    ├── search (2) ──┬── quote (2) ────┼── author (2) ─┤
    ├─ continue (2) ─┼─── week (2) ────┤   (2 rows)    │
-   ├──────────────── resources (6) ───────────────────┤
+   ├────────────── featured book (6) ─────────────────┤
    └──────────────────────────────────────────────────┘
    ------------------------------------------------------------- */
 .bento {
@@ -401,7 +401,7 @@ a:hover { color: var(--burgundy); }
 .b-author    { grid-column: span 2; grid-row: span 2; }
 .b-continue  { grid-column: span 2; }
 .b-week      { grid-column: span 2; }
-.b-resources { grid-column: span 6; }
+.b-book      { grid-column: span 6; }
 
 /* Small label at the top of each card, like "LATEST EPISODE" */
 .card-label {
@@ -576,6 +576,47 @@ a:hover { color: var(--burgundy); }
 
 .more-link { display: inline-block; margin-top: 14px; font-weight: 500; }
 
+/* Featured book (wide card at the bottom of Home)
+   Laptop: 3 columns → cover | title, facts, buttons | episodes
+   Tablet: cover | info, with the episodes underneath
+   Phone:  everything stacked, cover smaller and centred */
+.book-feature {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.book-feature-cover { display: block; }
+.book-feature-cover .cover { transition: transform 0.25s; }
+.book-feature-cover:hover .cover { transform: translateY(-6px) rotate(-1deg); }
+.book-feature-info h3 { font-size: clamp(26px, 3vw, 34px); margin: 6px 0 2px; }
+.book-feature-info h3 a { color: var(--ink); text-decoration: none; }
+.book-feature-info h3 a:hover { color: var(--burgundy); }
+.book-feature-info p { margin: 0 0 10px; }
+.book-feature-info .tags-row { margin: 14px 0 18px; }
+.book-feature-episodes {
+  border-left: 1px solid var(--line);
+  padding-left: 24px;
+}
+.book-feature-episodes .mini-list li:first-child { padding-top: 4px; }
+.book-feature-episodes .tags-row { margin-bottom: 6px; }
+.book-feature-episodes a { display: block; }
+
+@media (max-width: 1100px) {
+  .book-feature { grid-template-columns: 130px minmax(0, 1fr); }
+  .book-feature-episodes {
+    grid-column: 1 / -1;          /* full width, under the cover and info */
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+}
+@media (max-width: 640px) {
+  .book-feature { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .book-feature-cover { width: 45%; max-width: 160px; justify-self: center; }
+}
+
 /* Study week strip */
 .week {
   list-style: none;
@@ -602,13 +643,13 @@ a:hover { color: var(--burgundy); }
 @media (max-width: 1100px) {
   .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bento > * { grid-column: span 1; grid-row: span 1; }
-  .b-hero, .b-resources { grid-column: span 2; }
+  .b-hero, .b-book { grid-column: span 2; }
 }
 
 /* Phone: 1 column, cards stacked */
 @media (max-width: 640px) {
   .bento { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .b-hero, .b-resources { grid-column: span 1; }
+  .b-hero, .b-book { grid-column: span 1; }
   /* Hero: picture goes under the text, smaller and centred */
   .b-hero { grid-template-columns: minmax(0, 1fr); }
   .hero-figure { width: 62%; max-width: 230px; justify-self: center; }
@@ -1326,7 +1367,7 @@ img.author-pic { object-fit: cover; object-position: top; }   /* crop photos nea
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
-  .btn, .arrow-btn, .book-card .cover, .author-card { transition: none; }
+  .btn, .arrow-btn, .book-card .cover, .book-feature-cover .cover, .author-card { transition: none; }
 }
 
 

@@ -7,7 +7,9 @@
    4. Start: load data, connect the filters
 
    Tip: you can open the library with a filter already chosen,
-   e.g. library.html?subject=ethics  (the book page uses this).
+   e.g. library.html?subject=ethics  (the book page uses this),
+   or library.html?collection=Women%20writers%20%26%20science
+   (%20 = space, %26 = &, because addresses can't contain them).
    ============================================================= */
 
 let DATA = null;          // all our JSON data, after loading
@@ -36,8 +38,28 @@ function fillFilters() {
     .sort(function (a, b) { return a.name.localeCompare(b.name); });
   addOptions($('f-author'), authors.map(function (a) { return { value: a.id, label: a.name }; }));
 
-  // Filters given in the address (e.g. ?subject=ethics)
-  selectFromUrl(['subject', 'era', 'author']);
+  // Collections, e.g. "Women writers & science". A book can be in
+  // several collections, or in none ("collections" is optional, so
+  // "|| []" means "no collections").
+  const collections = uniqueSorted(DATA.books.flatMap(function (b) { return b.collections || []; }));
+  addOptions($('f-collection'), collections.map(function (c) { return { value: c, label: c }; }));
+
+  // One shortcut chip per collection, above the filters
+  $('collection-chips').innerHTML = collections.map(function (c) {
+    return '<button type="button" class="chip" data-collection="' + escapeHTML(c) + '" aria-pressed="false">' + escapeHTML(c) + '</button>';
+  }).join('');
+
+  // Filters given in the address (e.g. ?subject=ethics or
+  // ?collection=Women%20writers%20%26%20science)
+  selectFromUrl(['subject', 'era', 'author', 'collection']);
+}
+
+// Chip pressed = its collection is chosen in the Collection menu
+function updateChips() {
+  const chosen = $('f-collection').value;
+  document.querySelectorAll('#collection-chips .chip').forEach(function (chip) {
+    chip.setAttribute('aria-pressed', chip.dataset.collection === chosen);
+  });
 }
 
 
@@ -49,6 +71,7 @@ function getFilteredBooks() {
   const subject = $('f-subject').value;
   const era = $('f-era').value;
   const author = $('f-author').value;
+  const collection = $('f-collection').value;
   const onlyWithEpisode = $('f-episode').checked;
   const includeProposed = $('f-proposed').checked;
 
@@ -58,11 +81,12 @@ function getFilteredBooks() {
       if (subject && !book.subjects.includes(subject)) return false;
       if (era && book.era !== era) return false;
       if (author && book.author !== author) return false;
+      if (collection && !(book.collections || []).includes(collection)) return false;
       if (onlyWithEpisode && episodesForBook(DATA, book.id).length === 0) return false;
       if (!includeProposed && book.candidate) return false;
       if (query) {
         const a = findById(DATA.authors, book.author);
-        const text = [book.title, book.shortTitle, a ? a.name : '', book.era].concat(book.subjects).join(' ').toLowerCase();
+        const text = [book.title, book.shortTitle, a ? a.name : '', book.era].concat(book.subjects, book.collections || []).join(' ').toLowerCase();
         if (!text.includes(query)) return false;
       }
       return true;   // passed every test
@@ -97,6 +121,7 @@ const SHELVES = [
 function render() {
   const books = getFilteredBooks();
   const box = $('books');
+  updateChips();   // keep the collection chips in step with the menu
 
   $('result-count').textContent = 'Showing ' + books.length + ' of ' + DATA.books.length + ' books';
 
@@ -161,6 +186,15 @@ async function startLibrary() {
   $('f-reset').addEventListener('click', function () {
     form.reset();                                  // back to the default values
     history.replaceState(null, '', 'library.html'); // remove ?subject=… from the address
+    render();
+  });
+
+  // Collection chip: click = choose that collection; click again = all books
+  $('collection-chips').addEventListener('click', function (event) {
+    const chip = event.target.closest('.chip');
+    if (!chip) return;
+    const menu = $('f-collection');
+    menu.value = menu.value === chip.dataset.collection ? '' : chip.dataset.collection;
     render();
   });
 

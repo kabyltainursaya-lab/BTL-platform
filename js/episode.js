@@ -111,8 +111,10 @@ function quizSectionHTML(ep) {
 function linksHTML(ep, book, data) {
   const resources = resourcesForEpisode(data, ep);   // from app.js
 
+  // The book's cover card, plus its public-domain illustration if it has
+  // one (illustrationHTML() is in app.js; it returns '' if there is none)
   const bookPart = book
-    ? '<div class="linked-book">' + bookCardHTML(book, data) + '</div>'
+    ? '<div class="linked-book">' + bookCardHTML(book, data) + '</div>' + illustrationHTML(book)
     : '<p class="meta">Book to be announced.</p>';
 
   const resourcePart = resources.length === 0

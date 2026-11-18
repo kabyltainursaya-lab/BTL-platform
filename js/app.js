@@ -351,6 +351,42 @@ function coverHTML(book, authorName) {
   '</div>';
 }
 
+// The "where can I read it?" button for a book:
+//  - public-domain book ("publicDomain": true) with a real link in
+//    "freeText" → "Read it free" (e.g. Project Gutenberg)
+//  - public-domain book whose link we haven't checked yet → no button
+//  - book still under copyright ("publicDomain": false) → "Find this book":
+//    an Open Library search for the title and author.
+//    We NEVER link to free copies of books that are still under copyright.
+// extraClass: e.g. 'btn-ghost' for the outlined button style.
+function bookLinkButton(book, authorName, extraClass) {
+  const cls = 'btn' + (extraClass ? ' ' + extraClass : '');
+  const newTab = icon('external') + '<span class="visually-hidden"> (opens in a new tab)</span>';
+  if (book.publicDomain === true) {
+    return hasText(book.freeText) && book.freeText.startsWith('http')
+      ? '<a class="' + cls + '" href="' + escapeHTML(book.freeText) + '" target="_blank" rel="noopener">Read it free ' + newTab + '</a>'
+      : '';
+  }
+  const search = 'https://openlibrary.org/search?q=' + encodeURIComponent(book.title + ' ' + authorName);
+  return '<a class="' + cls + '" href="' + search + '" target="_blank" rel="noopener">Find this book ' + newTab + '</a>';
+}
+
+// A public-domain illustration for a book, with its caption and source.
+// Fields in books.json: "illustration" (path), "illustrationAlt",
+// "illustrationCaption", "illustrationSource". No illustration → ''.
+// The source line stays hidden while it still says TODO.
+// Missing file → paper texture (data-fallback, see handleBrokenImage).
+function illustrationHTML(book) {
+  if (!book || !hasText(book.illustration)) return '';
+  const source = hasText(book.illustrationSource)
+    ? '<span class="figure-source">Image: ' + escapeHTML(book.illustrationSource) + '</span>'
+    : '';
+  return '<figure class="book-figure">' +
+    '<img src="' + escapeHTML(book.illustration) + '" alt="' + escapeHTML(book.illustrationAlt || '') + '" loading="lazy" data-fallback="texture">' +
+    '<figcaption>' + escapeHTML(book.illustrationCaption || '') + source + '</figcaption>' +
+  '</figure>';
+}
+
 // A book card: cover + title + author. Used on shelves and grids.
 function bookCardHTML(book, data) {
   const author = findById(data.authors, book.author);
@@ -667,13 +703,13 @@ function searchAll(data, query) {
   data.books.forEach(function (book) {
     const author = findById(data.authors, book.author);
     const authorName = author ? author.name : '';
-    if (matches([book.title, authorName, book.era].concat(book.subjects))) {
+    if (matches([book.title, authorName, book.era].concat(book.subjects, book.collections || []))) {
       results.push({ type: 'Book', title: book.shortTitle, detail: authorName + ' · ' + book.year, href: pageUrl('books', book.id) });
     }
   });
 
   data.authors.forEach(function (author) {
-    if (matches([author.name, author.country])) {
+    if (matches([author.name, author.realName || '', author.country])) {
       results.push({ type: 'Author', title: author.name, detail: lifeYears(author), href: pageUrl('authors', author.id) });
     }
   });

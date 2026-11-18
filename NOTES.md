@@ -46,7 +46,7 @@ only allow `fetch()` when the page comes from a **server**:
 | `shelf.html`, `about.html` | My Shelf and About (Step 6). |
 | `css/style.css` | The **design system**. Section 1 holds the **design tokens** (colours, fonts, corner sizes). Change a token → the whole site changes. |
 | `js/app.js` | The **shared engine**, loaded on every page. Builds the menu, loads JSON data, adds the footer, runs the fade-in. |
-| `js/home.js` | Code only for the home page: fills the bento cards. Settings at the top (`FEATURED_AUTHOR_ID`, `FEATURED_BOOK_ID`, `NEW_RESOURCES_COUNT`). |
+| `js/home.js` | Code only for the home page: fills the bento cards. Settings at the top (`FEATURED_AUTHOR_HOURS`, `NEVER_FEATURE`, `ONLY_WITH_PORTRAIT`, `FEATURED_BOOK_ID`, `NEW_RESOURCES_COUNT`). |
 | `js/library.js` | Library: fills the filter menus from the data, filters the books, shows shelves or grid. |
 | `js/book.js` | Book page: reads `?id=` from the address and builds the page for that one book. |
 | `js/authors.js`, `js/author.js` | All authors / one author (same idea as the book page). |
@@ -64,7 +64,7 @@ only allow `fetch()` when the page comes from a **server**:
 | `data/episodes.json` | Our episodes, with show notes and quiz questions. `status` = `published`, `in-production` or `coming-soon`. |
 | `data/resources.json` | Extra learning materials (link out only, never upload PDFs). |
 | `data/reviews.json` | Real reviews by real people. Empty for now: `[]`. |
-| `images/` | Logo, Mary Shelley portrait (public domain), book photo, team photos. |
+| `images/` | Logo, author portraits (`mary-shelley.jpg`, `poe.jpg`, `stevenson.jpg`, `wells.jpg`, `gilman.jpg`, `eliot.jpg`), `frankenstein-engraving.jpg`, book photo. File names: lowercase, no spaces. (Two photos of living authors are stored but **not used**: see the 18 Nov evening update.) |
 
 ---
 
@@ -121,7 +121,7 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 | Card | Rule |
 |---|---|
 | Latest episode | Newest `published` episode. If none is published yet → the first `in-production` one (now: Ep 1). |
-| Featured author | The author whose id is in `FEATURED_AUTHOR_ID`. Portrait if `portrait` is filled, otherwise an initials card. |
+| Featured author | *(changed 18 Nov)* A different author every 2 hours, from the authors with a portrait (see the "Update 18 Nov (late)" section). |
 | Quote of the day | A different quote from `quotes.json` each day, in order, then starts again. |
 | Continue watching | Episodes you **saved** that are not marked as watched. |
 | Featured book *(added 18 Nov, replaced "New resources")* | The book whose id is in `FEATURED_BOOK_ID`. Shows its CSS cover, title, author, year, era, subjects, its episodes and the buttons Open book / Read it free / Save. |
@@ -303,6 +303,85 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 
 ---
 
+## Update 18 Nov (evening): Women writers & science
+
+**What changed**
+- **3 new authors** in `authors.json`: Charlotte Perkins Gilman, George Eliot, Rebecca Skloot (bios are `TODO` for us).
+- **3 new books** in `books.json`: *The Yellow Wallpaper* (1892), *The Lifted Veil* (1859), *The Immortal Life of Henrietta Lacks* (2010). Summaries are `TODO` for us. *(Later the same evening: we confirmed them as Episodes 3–5, so they are now `"candidate": false`. See the next update.)*
+- **Portraits connected**: Poe, Stevenson, Wells, Gilman, Eliot now show real portraits instead of initials cards.
+- **Image files renamed** to clean lowercase names (spaces, commas and apostrophes break links online):
+
+| Old file name (= Wikimedia Commons file) | New file name |
+|---|---|
+| `Charlotte_Perkins_Gilman_3.jpg` | `gilman.jpg` |
+| `George_Eliot,_por_François_D'Albert_Durade.jpg` | `eliot.jpg` |
+| `Edgar_Allan_Poe,_circa_1849,_restored,_squared_off.jpg` | `poe.jpg` |
+| `Robert_Louis_Stevenson_1885.jpg` | `stevenson.jpg` |
+| `H_G_Wells_pre_1922.jpg` | `wells.jpg` |
+| `Frankenstein_engraved.jpg` | `frankenstein-engraving.jpg` |
+
+  The old name is kept as the source: `"portraitSource": "Wikimedia Commons, File:<old name>"`. It appears under the portrait on the author page.
+- **Frankenstein engraving** is shown on the Frankenstein book page and on the Episode 1 page, with a caption. The caption only says what is printed on the plate itself ("T. Holst, del." = drawn by T. Holst, "W. Chevalier, sculp." = engraved by W. Chevalier).
+- **Library**: new **Collection** menu plus a "Women writers & science" chip (Frankenstein, The Yellow Wallpaper, The Lifted Veil, Henrietta Lacks). Link straight to it: `library.html?collection=Women%20writers%20%26%20science`.
+- **"Pairs well with"** box on *The Lifted Veil* page, linking to *Frankenstein*.
+- **"Find this book"** button for books still under copyright (Henrietta Lacks, Flowers for Algernon, The Stand). It opens an Open Library search. We never link to free copies of copyrighted books.
+
+**New fields in `books.json`**
+| Field | Meaning |
+|---|---|
+| `publicDomain` | `true` = free to read (out of copyright) → "Read it free" button if `freeText` is a real link. `false` = still under copyright → "Find this book" button (Open Library search), never a free copy. |
+| `collections` | Optional list, e.g. `["Women writers & science"]`. Every collection name appears in the Library's Collection menu and as a chip, all by itself. |
+| `pairsWith` + `pairingNote` | Optional: book ids that go well with this one, and why. Shows the "Pairs well with" box. |
+| `illustration`, `illustrationAlt`, `illustrationCaption`, `illustrationSource` | Optional public-domain picture (see the images guide below). |
+
+**New field in `authors.json`**: `realName` (optional), for pen names. George Eliot's page now says "Pen name of Mary Ann Evans".
+
+**What was checked**
+- Project Gutenberg numbers: **#1952 = *The Yellow Wallpaper*, Charlotte Perkins Gilman** and **#2165 = *The Lifted Veil*, George Eliot**. gutenberg.org itself gave error 503 on 18 Nov (down again), so this was checked on Gutenberg's official mirror (gutenberg.pglaf.org). **We open both links ourselves once.**
+- The Open Library search for *The Immortal Life of Henrietta Lacks* works and finds Rebecca Skloot's book.
+- All JSON files load; every portrait file exists; every book's author id exists; no copyrighted book has a free-read link.
+- Pages tested in Chrome: Library (with and without the collection), the 3 new book pages, Frankenstein, Episode 1, Authors, George Eliot, Rebecca Skloot, Home. No error messages and no broken images.
+
+**TODOs for us**
+- [ ] **Stephen King and Rebecca Skloot photos** (`images/Stephen_King_(cropped).jpg`, `images/Rebecca_Skloot_(7981284630).jpg`): living authors, NOT used yet (initials cards). **Check Wikimedia license (CC BY / CC BY-SA requires attribution) before using.**
+- [ ] Frankenstein engraving: confirm the source (which edition + the Wikimedia Commons page) and write it in `"illustrationSource"` in `books.json`. Until then the source line is hidden. Then add it to "Image credits" on `about.html`.
+- [ ] Open the Wikimedia Commons page of each portrait and check its licence says public domain (a few Commons files are "restored" versions with their own licence).
+- [ ] Bios for Gilman, Eliot, Skloot; summaries for the 3 new books.
+- [ ] The `era` of the 3 new books (*Gothic*, *Victorian / Gothic*, *Non-fiction (21st century)*) and the cover colours are **suggestions**: change them if you like.
+- [x] Decide: should the 3 new books become Episodes 3, 4 and 5? → **Yes** (see below).
+
+**Our notes (write here)**
+-
+
+---
+
+## Update 18 Nov (late): Episodes 3–8 and the rotating featured author
+
+**Episodes** (`data/episodes.json`)
+| Episode | Book | Status |
+|---|---|---|
+| 3 | *The Yellow Wallpaper* (`the-yellow-wallpaper`) | coming soon |
+| 4 | *The Lifted Veil* (`the-lifted-veil`) | coming soon |
+| 5 | *The Immortal Life of Henrietta Lacks* (`immortal-life-of-henrietta-lacks`) | coming soon |
+| 6, 7, 8 | Book to be announced (empty placeholders, like 3–5 used to be) | coming soon |
+
+- The three books now have `"episodes": ["ep3"]` (and ep4, ep5) and `"candidate": false`. In the Library they moved from "Proposed books" to the "In our library" shelf.
+- Their book pages now say "Episode 3 about this book is coming soon." instead of "No episode yet." (new code in `episodesHTML()` in `js/book.js`).
+- **Titles and disciplines are still placeholders** ("Episode 3", `"TBA"`). When we have the episode question, write it in `"title"` and the subject in `"discipline"`. We didn't use `TODO` here because the title is shown to visitors.
+
+**Featured author on Home now changes every 2 hours** (`js/home.js`)
+- The settings at the top of `home.js` replace the old `FEATURED_AUTHOR_ID`:
+  - `FEATURED_AUTHOR_HOURS = 2`: how long each author stays.
+  - `NEVER_FEATURE = ['daniel-keyes']`: authors who are never featured. Daniel Keyes is **not deleted**: he, *Flowers for Algernon* and Episode 2 stay everywhere else.
+  - `ONLY_WITH_PORTRAIT = true`: only authors with a portrait take turns, so Home never shows an initials card. Right now that's 6 authors: Mary Shelley, Poe, Eliot, Stevenson, Gilman, Wells. 6 × 2 hours = everyone is shown once every 12 hours.
+- **How it decides (for the judges):** `Date.now()` is the number of milliseconds since 1 January 1970. We divide it by the length of 2 hours to get a "block number" that goes up by 1 every 2 hours. `blockNumber % 6` (the remainder) is always 0–5, which picks one author from the list. Every visitor in the same 2 hours sees the same author; no storage needed.
+- Add a portrait to an author in `authors.json` → they join the rotation by themselves.
+
+**Our notes (write here)**
+-
+
+---
+
 ## Images: how to swap in our photos
 
 **Rule:** we never download images from the internet. Where we have no image yet, the site shows a **designed placeholder** made only with CSS. When a photo is ready, we change **one line**, and the placeholder is replaced. If we make a typo in the path, the placeholder comes back (never a broken-image icon).
@@ -312,6 +391,7 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 | **Our team photos** | `data/team.json` → `"photo": "images/nursaya.jpg"` | Paper-texture oval with initials (KN, UN) |
 | **Author portraits** (public domain only!) | `data/authors.json` → `"portrait"` + `"portraitSource"` | Dark card with gold frame and initials |
 | **Book covers** | Never images: `data/books.json` → `"coverColor"` | CSS cover (cloth colour, gold frame, spine) |
+| **Book illustration** (public domain only!) *(added 18 Nov)* | `data/books.json` → `"illustration"`, `"illustrationAlt"`, `"illustrationCaption"`, `"illustrationSource"`. Shown on the book page ("From the book") **and** on every episode page about that book. | Nothing is shown if `"illustration"` is empty; paper texture if the file is missing |
 | **Hero picture on Home** | `index.html` → the `<img>` inside `<figure class="hero-figure">` (change `src`, `alt`, caption) | Paper texture if the file is missing |
 | **Decorative photo on About** | Replace `images/book.jpg` with our own photo (same name) | Paper texture with "Between the Lines" if the file is missing |
 | **Logo / favicon** | `images/favicon-3-black-script.png` | — (we already have it) |
@@ -379,11 +459,12 @@ We use the same GitHub account as the v1 site (**kabyltainursaya-lab**). The v1 
 The judges will probably ask "How does it work?" Each task proves we can answer.
 
 - [ ] **Step 1:** In `css/style.css`, change `--green` to `#A8B58A`. Which parts of the site change, and why? (Hint: search for `var(--green)`.)
-- [ ] **Step 2:** In `js/home.js`, set `FEATURED_AUTHOR_ID` to `'daniel-keyes'`. Why does an initials card appear instead of a portrait? What happens with `'mark-twain'`?
+- [ ] **Step 2:** In `js/home.js`, set `FEATURED_AUTHOR_HOURS` to `0.01` (36 seconds) and refresh Home every half minute: the author changes. Then set `ONLY_WITH_PORTRAIT` to `false`: which authors join the rotation now, and why do they show initials cards? Put both settings back afterwards!
 - [ ] **Step 3:** Add one real book to `data/books.json` (copy a `{ … }` record, give it a new unique `id`, `"candidate": true`, an `author` id that exists in `authors.json`). Before checking, predict the 5+ places it will appear.
 - [ ] **Step 4:** Add a 4th multiple-choice question to Episode 1's `"quiz"`, based on our real research. Remember: `"answer": 0` = the FIRST option. Test that the green answer is the right one.
 - [ ] **Step 5:** Add one real resource to the END of `data/resources.json`, with a link we opened and checked. Then check: is it first under "Newest resources" in the Quick search card on Home? Is its APA citation correct?
 - [ ] **Home update:** In `js/home.js`, set `FEATURED_BOOK_ID` to `'flowers-for-algernon'`. What changes on the card (cover colour, subjects, episode)? Why is there no "Read it free" button now? (Hint: look at `freeText` in `books.json`.)
+- [ ] **Collections:** Add `"collections": ["Women writers & science"]` to one more real book by a woman writer (or start a new collection on another book, e.g. `"Victorian science"`). Predict: where does the new name appear without changing any HTML or JavaScript?
 - [ ] **Step 6:** Each of us writes a real review of *Frankenstein* (or *Flowers for Algernon*) in `data/reviews.json`. Check the stars and average on the book page. 
 
 ### Before the fair (checklist)

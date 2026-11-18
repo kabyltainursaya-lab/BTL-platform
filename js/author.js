@@ -46,6 +46,8 @@ async function startAuthor() {
       '<div>' +
         '<span class="pill">/author</span>' +
         '<h1>' + escapeHTML(author.name) + '</h1>' +
+        // Pen names: "realName" in authors.json, e.g. George Eliot → Mary Ann Evans
+        (hasText(author.realName) ? '<p class="meta">Pen name of ' + escapeHTML(author.realName) + '</p>' : '') +
         '<dl class="facts">' +
           '<div><dt>' + (author.died ? 'Lived' : 'Born') + '</dt><dd>' + (author.died ? author.born + '–' + author.died : author.born) + '</dd></div>' +
           '<div><dt>Country</dt><dd>' + escapeHTML(author.country) + '</dd></div>' +

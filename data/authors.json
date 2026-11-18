@@ -26,8 +26,8 @@
     "died": 1849,
     "country": "United States",
     "bio": "TODO: 2–3 sentences written by the students.",
-    "portrait": "",
-    "portraitSource": "TODO: students add a public-domain portrait and write its source here."
+    "portrait": "images/poe.jpg",
+    "portraitSource": "Wikimedia Commons, File:Edgar_Allan_Poe,_circa_1849,_restored,_squared_off.jpg"
   },
   {
     "id": "robert-louis-stevenson",
@@ -36,8 +36,8 @@
     "died": 1894,
     "country": "Scotland",
     "bio": "TODO: 2–3 sentences written by the students.",
-    "portrait": "",
-    "portraitSource": ""
+    "portrait": "images/stevenson.jpg",
+    "portraitSource": "Wikimedia Commons, File:Robert_Louis_Stevenson_1885.jpg"
   },
   {
     "id": "hg-wells",
@@ -46,13 +46,44 @@
     "died": 1946,
     "country": "England",
     "bio": "TODO: 2–3 sentences written by the students.",
-    "portrait": "",
-    "portraitSource": ""
+    "portrait": "images/wells.jpg",
+    "portraitSource": "Wikimedia Commons, File:H_G_Wells_pre_1922.jpg"
   },
   {
     "id": "stephen-king",
     "name": "Stephen King",
     "born": 1947,
+    "died": null,
+    "country": "United States",
+    "bio": "TODO: 2–3 sentences written by the students.",
+    "portrait": "",
+    "portraitSource": "No photo: living author. Initials card only."
+  },
+  {
+    "id": "charlotte-perkins-gilman",
+    "name": "Charlotte Perkins Gilman",
+    "born": 1860,
+    "died": 1935,
+    "country": "United States",
+    "bio": "TODO: 2–3 sentences written by the students.",
+    "portrait": "images/gilman.jpg",
+    "portraitSource": "Wikimedia Commons, File:Charlotte_Perkins_Gilman_3.jpg"
+  },
+  {
+    "id": "george-eliot",
+    "name": "George Eliot",
+    "realName": "Mary Ann Evans",
+    "born": 1819,
+    "died": 1880,
+    "country": "England",
+    "bio": "TODO: 2–3 sentences written by the students.",
+    "portrait": "images/eliot.jpg",
+    "portraitSource": "Wikimedia Commons, File:George_Eliot,_por_François_D'Albert_Durade.jpg"
+  },
+  {
+    "id": "rebecca-skloot",
+    "name": "Rebecca Skloot",
+    "born": 1972,
     "died": null,
     "country": "United States",
     "bio": "TODO: 2–3 sentences written by the students.",

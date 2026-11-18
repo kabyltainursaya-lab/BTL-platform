@@ -32,10 +32,14 @@ function bookDetailsHTML(book, data) {
   // Year, plus the note if there is one, e.g. "1818 (revised edition 1831)"
   const year = book.year + (book.yearNote ? ' <span class="meta" style="display:inline">(' + escapeHTML(book.yearNote) + ')</span>' : '');
 
-  // "Read it free" button only for real links (public-domain books)
-  const freeButton = hasText(book.freeText) && book.freeText.startsWith('http')
-    ? '<a class="btn" href="' + escapeHTML(book.freeText) + '" target="_blank" rel="noopener">Read it free ' + icon('external') + '<span class="visually-hidden"> (opens in a new tab)</span></a>'
-    : '';
+  // Collection tags: each one opens the library showing that collection
+  const collections = (book.collections || []).map(function (c) {
+    return '<a class="tag tag-cream tag-link" href="library.html?collection=' + encodeURIComponent(c) + '">' + escapeHTML(c) + '</a>';
+  }).join(' ');
+
+  // "Read it free" (public-domain books) or "Find this book" (books still
+  // under copyright). bookLinkButton() is in app.js.
+  const freeButton = bookLinkButton(book, authorName, '');
 
   return '<a class="more-link" href="library.html">← Back to the library</a>' +
     '<article class="detail section" style="margin-top:20px">' +
@@ -52,6 +56,7 @@ function bookDetailsHTML(book, data) {
           (author ? '<div><dt>Country</dt><dd>' + escapeHTML(author.country) + '</dd></div>' : '') +
         '</dl>' +
         '<p class="row tags-row">' + subjects + '</p>' +
+        (collections ? '<p class="row tags-row">' + collections + '</p>' : '') +
         '<h2 class="section-title" style="margin-top:24px">Summary</h2>' +
         (hasText(book.summary) ? '<p>' + escapeHTML(book.summary) + '</p>' : '<p class="meta">Summary coming soon.</p>') +
         '<div class="row" style="margin-top:20px">' + saveButton('books', book.id) + doneButton('books', book.id) + freeButton + '</div>' +
@@ -61,13 +66,55 @@ function bookDetailsHTML(book, data) {
 
 
 /* -------------------------------------------------------------
+   2b. ILLUSTRATION (only books with an "illustration" in books.json)
+   ------------------------------------------------------------- */
+function illustrationSectionHTML(book) {
+  const figure = illustrationHTML(book);   // from app.js
+  if (!figure) return '';
+  return '<section class="section" aria-labelledby="ill-title">' +
+    '<h2 class="section-title" id="ill-title">From the book</h2>' + figure +
+  '</section>';
+}
+
+
+/* -------------------------------------------------------------
+   2c. PAIRS WELL WITH
+   "pairsWith": ["frankenstein"] in books.json → a small card for each
+   paired book, plus "pairingNote" (why they belong together).
+   ------------------------------------------------------------- */
+function pairingHTML(book, data) {
+  const pairs = (book.pairsWith || [])
+    .map(function (id) { return findById(data.books, id); })
+    .filter(Boolean);   // skip ids that don't exist (typos)
+  if (pairs.length === 0) return '';
+
+  return '<section class="section card card-cream" aria-labelledby="pair-title">' +
+    '<h2 class="section-title" id="pair-title">Pairs well with</h2>' +
+    '<div class="pairing">' +
+      pairs.map(function (b) { return bookCardHTML(b, data); }).join('') +
+      (hasText(book.pairingNote) ? '<p>' + escapeHTML(book.pairingNote) + '</p>' : '') +
+    '</div>' +
+  '</section>';
+}
+
+
+/* -------------------------------------------------------------
    3. LINKED EPISODES
    ------------------------------------------------------------- */
 function episodesHTML(book, data) {
   const episodes = episodesForBook(data, book.id);   // from app.js
 
+  // "Coming soon" episodes about this book (episodesForBook skips them,
+  // because they have no page yet) → we just name them, e.g. "Episode 3"
+  const planned = data.episodes.filter(function (ep) {
+    return ep.status === 'coming-soon' && (ep.book === book.id || book.episodes.includes(ep.id));
+  });
+
   let content;
-  if (episodes.length === 0) {
+  if (episodes.length === 0 && planned.length > 0) {
+    content = '<p class="notice">' + planned.map(function (ep) { return 'Episode ' + ep.number; }).join(', ') +
+      ' about this book is coming soon.</p>';
+  } else if (episodes.length === 0) {
     content = '<p class="notice">No episode yet' + (book.candidate ? ': this book is proposed for a future episode.' : '.') + '</p>';
   } else {
     content = '<div class="grid">' + episodes.map(function (ep) {
@@ -163,7 +210,8 @@ async function startBook() {
   }
 
   document.title = book.shortTitle + ' · Between the Lines';   // the browser tab title
-  box.innerHTML = bookDetailsHTML(book, data) + episodesHTML(book, data) + resourcesHTML(book, data) + reviewsHTML(book, data);
+  box.innerHTML = bookDetailsHTML(book, data) + illustrationSectionHTML(book) + pairingHTML(book, data) +
+    episodesHTML(book, data) + resourcesHTML(book, data) + reviewsHTML(book, data);
   updateSaveButtons();
 }
 

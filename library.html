@@ -32,7 +32,10 @@
       <header class="page-head">
         <span class="pill">/library</span>
         <h1>The Library</h1>
-        <p class="lead">Every book we study, on shelves. Search and filter by subject, era and author.</p>
+        <p class="lead">Every book we study, on shelves. Search and filter by subject, era, author and collection.</p>
+        <!-- Collection shortcuts, e.g. "Women writers & science".
+             Built by js/library.js from the "collections" field in books.json. -->
+        <div class="collection-chips" id="collection-chips" role="group" aria-label="Collections"></div>
       </header>
 
       <!-- ===== FILTERS =====
@@ -55,6 +58,10 @@
           <div class="field">
             <label for="f-author">Author</label>
             <select id="f-author"><option value="">All authors</option></select>
+          </div>
+          <div class="field">
+            <label for="f-collection">Collection</label>
+            <select id="f-collection"><option value="">All collections</option></select>
           </div>
         </div>
 

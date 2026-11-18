@@ -738,7 +738,7 @@ a:hover { color: var(--burgundy); }
 /* ---- Library filters ---- */
 .filters {
   display: grid;
-  grid-template-columns: 2fr repeat(3, 1fr);
+  grid-template-columns: 2fr repeat(4, 1fr);   /* search + 4 menus */
   gap: 14px;
   align-items: end;
 }
@@ -944,6 +944,35 @@ img.author-pic { object-fit: cover; object-position: top; }   /* crop photos nea
 .author-card h2 { font-size: 22px; margin: 12px 0 0; }
 .author-card .tag { align-self: flex-start; margin-top: 6px; }
 .portrait-source { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+/* ---- Book illustration (public-domain engraving, e.g. Frankenstein) ----
+   A framed picture with a caption, like a plate in an old book. */
+.book-figure {
+  margin: 0;
+  max-width: 420px;
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+.book-figure img,
+.book-figure .paper-texture {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+.book-figure figcaption { margin-top: 10px; font-size: 14px; line-height: 1.5; }
+.links-grid .book-figure { margin-top: 20px; max-width: 280px; }   /* episode page */
+.figure-source { display: block; margin-top: 4px; font-size: 13px; color: var(--muted); }
+
+/* ---- "Pairs well with" box on the book page ---- */
+.pairing { display: flex; gap: 20px; align-items: center; }
+.pairing .book-card { flex: 0 0 120px; }
+
+/* ---- Collection shortcut chips on the library page ---- */
+.collection-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 
 /* -------------------------------------------------------------
    10c. EPISODES

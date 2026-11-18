@@ -23,9 +23,16 @@
    0. SETTINGS
    ------------------------------------------------------------- */
 
-// Which author is featured on the home page?
-// Use an "id" from data/authors.json.
-const FEATURED_AUTHOR_ID = 'mary-shelley';
+// FEATURED AUTHOR: changes by itself every few hours.
+// How many hours each author stays on the home page:
+const FEATURED_AUTHOR_HOURS = 2;
+
+// Authors who are NEVER featured (use ids from data/authors.json).
+// They still appear everywhere else (Authors page, Library, episodes).
+const NEVER_FEATURE = ['daniel-keyes'];
+
+// true = only authors with a portrait take turns (no initials cards on Home)
+const ONLY_WITH_PORTRAIT = true;
 
 // Which book is featured in the wide card at the bottom?
 // Use an "id" from data/books.json.
@@ -94,15 +101,35 @@ function showLatestEpisode(data) {
 
 
 /* -------------------------------------------------------------
-   3. FEATURED AUTHOR
-   Shows the portrait if we have a public-domain one,
-   otherwise a designed card with initials.
+   3. FEATURED AUTHOR (changes every FEATURED_AUTHOR_HOURS hours)
+   How it works:
+   1. Make the list of authors who may be featured ("the pool"):
+      not in NEVER_FEATURE, and (if ONLY_WITH_PORTRAIT) with a portrait.
+   2. Count how many 2-hour blocks have passed since 1 January 1970
+      (that's how computers count time: Date.now() = milliseconds).
+   3. Block number % pool size = whose turn it is. % is the remainder,
+      so after the last author we start again with the first.
+   Everyone who visits in the same 2 hours sees the same author;
+   2 hours later it's the next one. No storage needed.
    ------------------------------------------------------------- */
+function pickFeaturedAuthor(authors) {
+  const pool = authors.filter(function (a) {
+    if (NEVER_FEATURE.includes(a.id)) return false;
+    if (ONLY_WITH_PORTRAIT && !hasText(a.portrait)) return false;
+    return true;
+  });
+  if (pool.length === 0) return null;
+
+  const blockLength = FEATURED_AUTHOR_HOURS * 60 * 60 * 1000;   // hours → milliseconds
+  const blockNumber = Math.floor(Date.now() / blockLength);
+  return pool[blockNumber % pool.length];
+}
+
 function showFeaturedAuthor(data) {
   const box = document.getElementById('featured-author');
-  const author = findById(data.authors, FEATURED_AUTHOR_ID);
+  const author = pickFeaturedAuthor(data.authors);
   if (!author) {
-    box.innerHTML = '<p class="notice">No author with the id “' + escapeHTML(FEATURED_AUTHOR_ID) + '”. Check FEATURED_AUTHOR_ID in js/home.js.</p>';
+    box.innerHTML = '<p class="notice">No author to feature. Check NEVER_FEATURE and ONLY_WITH_PORTRAIT in js/home.js.</p>';
     return;
   }
 
@@ -227,10 +254,9 @@ function showFeaturedBook(data) {
       }).join('') + '</ul>'
     : '<p class="meta">No episode yet' + (book.candidate ? ': this book is proposed for a future episode.' : '.') + '</p>';
 
-  // "Read it free" only for public-domain books with a real link
-  const freeButton = hasText(book.freeText) && book.freeText.startsWith('http')
-    ? '<a class="btn btn-ghost" href="' + escapeHTML(book.freeText) + '" target="_blank" rel="noopener">Read it free ' + icon('external') + '<span class="visually-hidden"> (opens in a new tab)</span></a>'
-    : '';
+  // "Read it free" (public domain) or "Find this book" (Open Library).
+  // bookLinkButton() is in app.js; the book page uses it too.
+  const freeButton = bookLinkButton(book, authorName, 'btn-ghost');
 
   box.innerHTML =
     '<div class="book-feature">' +

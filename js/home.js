@@ -163,26 +163,68 @@ function showFeaturedAuthor(data) {
 
 /* -------------------------------------------------------------
    4. QUOTE OF THE DAY
-   Every day shows the next quote in data/quotes.json.
-   We count the days since 1 January 1970 and use the
-   remainder (%) so the list starts again at the end.
+   One quote from data/quotes.json per day, the same for everyone.
+
+   HOW THE DAILY ROTATION WORKS (for the judges):
+   1. We work out the "day of the year": 1 January = 1,
+      2 January = 2 … 31 December = 365 (366 in a leap year).
+   2. We divide it by the number of quotes and keep the
+      remainder (%). With 22 quotes: day 1 → 1, day 22 → 0,
+      day 23 → 1 again… The remainder is always 0–21, so it is
+      always a valid position in the list.
+   3. Everyone has the same date, so everyone sees the same
+      quote all day. At midnight the day number goes up by 1
+      and the next quote appears. No storage, no server needed.
+   Add a quote to quotes.json → it joins the rotation by itself.
    ------------------------------------------------------------- */
+
+// Day of the year: 1 January = 1. We use Date.UTC for "today" and
+// for "0 January" (= 31 December of last year), so summer/winter
+// clock changes can never make a day 23 or 25 hours long.
+function dayOfYear(date) {
+  const today = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  const dayZero = Date.UTC(date.getFullYear(), 0, 0);
+  return (today - dayZero) / 86400000;   // 86 400 000 ms = 1 day
+}
+
+// The source line under the quote: "— Mary Shelley, Introduction to Frankenstein, 1831"
+//  - Book titles are in italics (<cite>).
+//  - Poem titles (they start with “) and descriptions (they start with a
+//    small letter, like "laboratory diary") are NOT in italics.
+//  - If "book" is a book id from our library, the work becomes a link
+//    to that book page.
+//  - "note" is optional, e.g. "(spelling modernized)" after the year.
+function quoteSourceHTML(quote, data) {
+  const parts = [escapeHTML(quote.author)];
+
+  if (hasText(quote.work)) {
+    const isTitle = !/^[“a-z]/.test(quote.work);   // starts with “ or a small letter → not a book title
+    let work = isTitle ? '<cite>' + escapeHTML(quote.work) + '</cite>' : escapeHTML(quote.work);
+    const book = quote.book ? findById(data.books, quote.book) : null;
+    if (book) work = '<a href="' + pageUrl('books', book.id) + '">' + work + '</a>';
+    parts.push(work);
+  }
+
+  if (hasText(quote.year)) {
+    parts.push(escapeHTML(quote.year) + (hasText(quote.note) ? ' (' + escapeHTML(quote.note) + ')' : ''));
+  }
+
+  return '— ' + parts.join(', ');
+}
+
 function showQuote(data) {
   const box = document.getElementById('quote');
   if (data.quotes.length === 0) {
     box.innerHTML = '<p>No quotes yet.</p>';
     return;
   }
-  const now = new Date();
-  const dayNumber = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
-  const quote = data.quotes[dayNumber % data.quotes.length];
-  const book = findById(data.books, quote.book);
-  const bookTitle = book ? '<a href="' + pageUrl('books', book.id) + '"><cite>' + escapeHTML(book.shortTitle) + '</cite></a>' : '';
+
+  const quote = data.quotes[dayOfYear(new Date()) % data.quotes.length];
 
   box.innerHTML =
     '<blockquote class="quote">' +
       '<p>“' + escapeHTML(quote.text) + '”</p>' +
-      '<footer>— ' + escapeHTML(quote.speaker) + ', ' + bookTitle + '<br><span class="meta">' + escapeHTML(quote.where) + '</span></footer>' +
+      '<footer>' + quoteSourceHTML(quote, data) + '</footer>' +
     '</blockquote>';
 }
 

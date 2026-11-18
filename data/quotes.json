@@ -1,38 +1,24 @@
 [
-  {
-    "text": "Perhaps a corpse would be re-animated; galvanism had given token of such things.",
-    "book": "frankenstein",
-    "speaker": "Mary Shelley",
-    "where": "Introduction to the 1831 edition"
-  },
-  {
-    "text": "Invention, it must be humbly admitted, does not consist in creating out of void, but out of chaos…",
-    "book": "frankenstein",
-    "speaker": "Mary Shelley",
-    "where": "Introduction to the 1831 edition"
-  },
-  {
-    "text": "Learn from me, if not by my precepts, at least by my example, how dangerous is the acquirement of knowledge…",
-    "book": "frankenstein",
-    "speaker": "Victor Frankenstein",
-    "where": "Chapter IV (1831 edition)"
-  },
-  {
-    "text": "It was on a dreary night of November, that I beheld the accomplishment of my toils.",
-    "book": "frankenstein",
-    "speaker": "Victor Frankenstein",
-    "where": "Chapter V (1831 edition)"
-  },
-  {
-    "text": "I was benevolent and good; misery made me a fiend.",
-    "book": "frankenstein",
-    "speaker": "The creature",
-    "where": "Chapter X (1831 edition)"
-  },
-  {
-    "text": "Beware; for I am fearless, and therefore powerful.",
-    "book": "frankenstein",
-    "speaker": "The creature",
-    "where": "Chapter XX (1831 edition)"
-  }
+  {"text": "Invention, it must be humbly admitted, does not consist in creating out of void, but out of chaos.", "author": "Mary Shelley", "work": "Introduction to Frankenstein", "year": "1831", "book": "frankenstein"},
+  {"text": "True!—nervous—very, very dreadfully nervous I had been and am; but why will you say that I am mad?", "author": "Edgar Allan Poe", "work": "The Tell-Tale Heart", "year": "1843", "book": "tell-tale-heart"},
+  {"text": "Man is not truly one, but truly two.", "author": "Robert Louis Stevenson", "work": "Strange Case of Dr Jekyll and Mr Hyde", "year": "1886", "book": "jekyll-and-hyde"},
+  {"text": "I learned to recognise the thorough and primitive duality of man…", "author": "Robert Louis Stevenson", "work": "Strange Case of Dr Jekyll and Mr Hyde", "year": "1886", "book": "jekyll-and-hyde"},
+  {"text": "It is a law of nature we overlook, that intellectual versatility is the compensation for change, danger, and trouble.", "author": "H. G. Wells", "work": "The Time Machine", "year": "1895", "book": "time-machine"},
+  {"text": "John is a physician, and perhaps… perhaps that is one reason I do not get well faster.", "author": "Charlotte Perkins Gilman", "work": "The Yellow Wallpaper", "year": "1892", "book": "the-yellow-wallpaper"},
+  {"text": "Science! true daughter of Old Time thou art! / Who alterest all things with thy peering eyes.", "author": "Edgar Allan Poe", "work": "“Sonnet—To Science”", "year": "1829", "book": null},
+  {"text": "All that we see or seem / Is but a dream within a dream.", "author": "Edgar Allan Poe", "work": "“A Dream Within a Dream”", "year": "1849", "book": null},
+  {"text": "No one would have believed in the last years of the nineteenth century that this world was being watched keenly and closely by intelligences greater than man's…", "author": "H. G. Wells", "work": "The War of the Worlds", "year": "1898", "book": null},
+  {"text": "The Brain — is wider than the Sky —", "author": "Emily Dickinson", "work": "poem", "year": "first published 1896", "book": null},
+  {"text": "If we had a keen vision and feeling of all ordinary human life, it would be like hearing the grass grow and the squirrel's heart beat, and we should die of that roar which lies on the other side of silence.", "author": "George Eliot", "work": "Middlemarch", "year": "1871–72", "book": null},
+  {"text": "What do we live for, if it is not to make life less difficult to each other?", "author": "George Eliot", "work": "Middlemarch", "year": "1871–72", "book": null},
+  {"text": "There are more things in heaven and earth, Horatio, / Than are dreamt of in your philosophy.", "author": "William Shakespeare", "work": "Hamlet", "year": "c. 1600", "book": null},
+  {"text": "We are such stuff / As dreams are made on, and our little life / Is rounded with a sleep.", "author": "William Shakespeare", "work": "The Tempest", "year": "c. 1611", "book": null},
+  {"text": "Why, sometimes I've believed as many as six impossible things before breakfast.", "author": "Lewis Carroll", "work": "Through the Looking-Glass", "year": "1871", "book": null},
+  {"text": "When I heard the learn'd astronomer… / Look'd up in perfect silence at the stars.", "author": "Walt Whitman", "work": "“When I Heard the Learn'd Astronomer”", "year": "1865", "book": null},
+  {"text": "From so simple a beginning endless forms most beautiful and most wonderful have been, and are being, evolved.", "author": "Charles Darwin", "work": "On the Origin of Species", "year": "1859", "book": null},
+  {"text": "Ignorance more frequently begets confidence than does knowledge.", "author": "Charles Darwin", "work": "The Descent of Man", "year": "1871", "book": null},
+  {"text": "The Analytical Engine weaves algebraical patterns just as the Jacquard-loom weaves flowers and leaves.", "author": "Ada Lovelace", "work": "Notes on the Analytical Engine", "year": "1843", "book": null},
+  {"text": "Nothing is too wonderful to be true, if it be consistent with the laws of nature.", "author": "Michael Faraday", "work": "laboratory diary", "year": "1849", "book": null},
+  {"text": "The great tragedy of Science—the slaying of a beautiful hypothesis by an ugly fact.", "author": "Thomas Henry Huxley", "work": "", "year": "1870", "book": null},
+  {"text": "If I have seen further it is by standing on the shoulders of Giants.", "author": "Isaac Newton", "work": "letter to Robert Hooke", "year": "1675", "book": null, "note": "spelling modernized"}
 ]

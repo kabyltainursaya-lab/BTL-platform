@@ -58,7 +58,7 @@ only allow `fetch()` when the page comes from a **server**:
 | `404.html` | Friendly "page not found". GitHub Pages shows it automatically for addresses that don't exist. |
 | `data/team.json` | Our team: name, role and `photo` path (empty = paper card with initials). |
 | `js/about.js` | Builds the "Meet the team" cards from `team.json`. |
-| `data/quotes.json` | Quotes for "Quote of the day". Copied word for word from the 1831 *Frankenstein*, with the chapter. All 6 were re-checked on 18 Nov against the 1831 edition on Wikisource. |
+| `data/quotes.json` | 22 quotes for "Quote of the day" (literature and science). Fields: `text`, `author`, `work`, `year`, `book` (a book id from our library, or `null`), optional `note`. *(Replaced 18 Nov, see "Update 18 Nov: Quote of the day".)* |
 | `data/books.json` | Our books. `author` holds an author **id** (like `"mary-shelley"`), which links to `authors.json`. |
 | `data/authors.json` | Our authors. `portrait` is empty when there's no public-domain picture (we'll show an initials card). |
 | `data/episodes.json` | Our episodes, with show notes and quiz questions. `status` = `published`, `in-production` or `coming-soon`. |
@@ -122,7 +122,7 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 |---|---|
 | Latest episode | Newest `published` episode. If none is published yet → the first `in-production` one (now: Ep 1). |
 | Featured author | *(changed 18 Nov)* A different author every 2 hours, from the authors with a portrait (see the "Update 18 Nov (late)" section). |
-| Quote of the day | A different quote from `quotes.json` each day, in order, then starts again. |
+| Quote of the day | A different quote from `quotes.json` each day, chosen by the day of the year (see "Update 18 Nov: Quote of the day"). |
 | Continue watching | Episodes you **saved** that are not marked as watched. |
 | Featured book *(added 18 Nov, replaced "New resources")* | The book whose id is in `FEATURED_BOOK_ID`. Shows its CSS cover, title, author, year, era, subjects, its episodes and the buttons Open book / Read it free / Save. |
 | Your study week | Days you opened the site this week (remembered in `localStorage`). |
@@ -432,6 +432,40 @@ For these two Frankenstein resources we chose Wikisource (not Standard Ebooks) o
 - [ ] Open the 6 "Read it free" links and the 2 new Wikisource resource links ourselves once.
 - [ ] Gilman fun fact: in *Why I Wrote The Yellow Wallpaper* (1913), Gilman wrote that she had **heard** the doctor changed his treatment after reading her story. Our text says "later wrote that it made him change his treatment". Decide if we want to say "later wrote that she heard it made him change…" to be extra precise for the judges. (Claude did not change it: it's our text.)
 - [ ] Optional: the bios mention book titles in plain text (not italics). That's fine for now.
+
+**Our notes (write here)**
+-
+
+---
+
+## Update 18 Nov: Quote of the day (22 quotes)
+
+**What changed**
+- `data/quotes.json` now has **22 quotes** from literature and science (Shelley, Poe, Stevenson, Wells, Gilman, Dickinson, Eliot, Shakespeare, Carroll, Whitman, Darwin, Lovelace, Faraday, Huxley, Newton), copied **exactly** as we wrote them.
+- Under each quote: **author, work, year**, e.g. *— Mary Shelley, Introduction to Frankenstein, 1831*.
+- If the quote's book is in our library, the work title is a **link to the book page** (Frankenstein, The Tell-Tale Heart, Jekyll and Hyde, The Time Machine, The Yellow Wallpaper).
+
+**Fields in `quotes.json`** (one quote per line)
+| Field | Example | Notes |
+|---|---|---|
+| `text` | `"Man is not truly one, but truly two."` | Exact wording. Poems: ` / ` where the line breaks. No outer quotation marks (the page adds “ ”). |
+| `author` | `"Robert Louis Stevenson"` | |
+| `work` | `"Strange Case of Dr Jekyll and Mr Hyde"` | Book titles → shown in *italics*. Poem titles start with “ (e.g. `"“Sonnet—To Science”"`) and descriptions start with a small letter (`"laboratory diary"`, `"poem"`) → not italic. Empty `""` → not shown (Huxley). |
+| `year` | `"1886"`, `"1871–72"`, `"c. 1600"` | Always text in quotes, because some years aren't plain numbers. |
+| `book` | `"jekyll-and-hyde"` or `null` | A book id from `books.json` → the work becomes a link. `null` (no quotes around it!) = not in our library. |
+| `note` | `"spelling modernized"` | Optional, shown in brackets after the year (only Newton for now). |
+
+**How the daily rotation works (for the judges)** — `showQuote()` and `dayOfYear()` in `js/home.js`
+1. `dayOfYear()` turns today's date into a number: 1 January = 1 … 31 December = 365.
+2. `dayOfYear % 22` (the **remainder** after dividing by the number of quotes) is always between 0 and 21, so it always points to a quote in the list. Example: 18 November = day 322 → 322 % 22 = **14** → the 15th quote (Lewis Carroll). (Computers count from 0!)
+3. Everyone has the same date, so **everyone sees the same quote all day**; at midnight the next one appears. No storage and no server needed.
+4. Add a quote → the list is longer, so `%` uses the new number by itself.
+- Small detail: on 1 January the count restarts at 1, so the order "jumps" once a year. That's fine.
+
+**TODOs for us**
+- [ ] Huxley (1870) has no `work`. If we want one, find the real source (it's usually attributed to his 1870 address "Biogenesis and Abiogenesis") and check it before adding.
+- [ ] Shelley quote: in the 1831 Introduction the sentence continues after "chaos" with a semicolon ("…out of chaos; the materials must…"). Our version ends with a full stop. That's normal when quoting part of a sentence, but we could write "chaos…" to show that it continues.
+- [ ] Open a reliable source for each quote once (Wikisource is good for the public-domain texts) so we can answer "where is this from?".
 
 **Our notes (write here)**
 -

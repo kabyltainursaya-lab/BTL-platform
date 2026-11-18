@@ -12,7 +12,7 @@
     "summary": "TODO: students write 2–3 sentences in their own words.",
     "coverColor": "#3b2f2f",
     "publicDomain": true,
-    "freeText": "https://www.gutenberg.org/ebooks/42324",
+    "freeRead": {"name": "Standard Ebooks", "url": "https://standardebooks.org/ebooks/mary-shelley/frankenstein"},
     "illustration": "images/frankenstein-engraving.jpg",
     "illustrationAlt": "Black-and-white engraving: a frightened man in a dark cloak runs out of a doorway, while a large, muscular figure wakes on the floor of a gloomy laboratory, beside a skeleton and an open book.",
     "illustrationCaption": "Engraving for Frankenstein, signed “T. Holst, del.” (drawn by) and “W. Chevalier, sculp.” (engraved by).",
@@ -32,7 +32,6 @@
     "summary": "TODO: students write 2–3 sentences in their own words.",
     "coverColor": "#4a5a3c",
     "publicDomain": false,
-    "freeText": "",
     "episodes": ["ep2"],
     "candidate": false
   },
@@ -48,7 +47,7 @@
     "summary": "TODO: students write 2–3 sentences in their own words.",
     "coverColor": "#5a1f24",
     "publicDomain": true,
-    "freeText": "TODO: add the Project Gutenberg link after checking it",
+    "freeRead": {"name": "Standard Ebooks", "url": "https://standardebooks.org/ebooks/edgar-allan-poe/short-fiction", "note": "in Poe’s Short Fiction collection, as “The Telltale Heart”"},
     "episodes": [],
     "candidate": true
   },
@@ -64,7 +63,7 @@
     "summary": "TODO: students write 2–3 sentences in their own words.",
     "coverColor": "#2f3b4a",
     "publicDomain": true,
-    "freeText": "TODO: add the Project Gutenberg link after checking it",
+    "freeRead": {"name": "Standard Ebooks", "url": "https://standardebooks.org/ebooks/robert-louis-stevenson/the-strange-case-of-dr-jekyll-and-mr-hyde"},
     "episodes": [],
     "candidate": true
   },
@@ -80,7 +79,7 @@
     "summary": "TODO: students write 2–3 sentences in their own words.",
     "coverColor": "#6b5a2e",
     "publicDomain": true,
-    "freeText": "TODO: add the Project Gutenberg link after checking it",
+    "freeRead": {"name": "Standard Ebooks", "url": "https://standardebooks.org/ebooks/h-g-wells/the-time-machine"},
     "episodes": [],
     "candidate": true
   },
@@ -96,7 +95,6 @@
     "summary": "TODO: students write 2–3 sentences in their own words.",
     "coverColor": "#3a3a3a",
     "publicDomain": false,
-    "freeText": "",
     "episodes": [],
     "candidate": true
   },
@@ -113,7 +111,7 @@
     "summary": "TODO: students write 2–3 sentences in their own words.",
     "coverColor": "#7d6b2a",
     "publicDomain": true,
-    "freeText": "https://www.gutenberg.org/ebooks/1952",
+    "freeRead": {"name": "Wikisource", "url": "https://en.wikisource.org/wiki/The_Yellow_Wall_Paper", "note": "1901 edition"},
     "episodes": ["ep3"],
     "candidate": false
   },
@@ -130,7 +128,7 @@
     "summary": "TODO: students write 2–3 sentences in their own words.",
     "coverColor": "#4b3550",
     "publicDomain": true,
-    "freeText": "https://www.gutenberg.org/ebooks/2165",
+    "freeRead": {"name": "Wikisource", "url": "https://en.wikisource.org/wiki/The_Works_of_George_Eliot_(Cabinet_Edition)/The_Lifted_Veil", "note": "1878 Cabinet Edition, revised by George Eliot"},
     "pairsWith": ["frankenstein"],
     "pairingNote": "Victorian ideas about reviving the dead.",
     "episodes": ["ep4"],
@@ -149,7 +147,6 @@
     "summary": "TODO: students write 2–3 sentences in their own words.",
     "coverColor": "#2e4a48",
     "publicDomain": false,
-    "freeText": "",
     "episodes": ["ep5"],
     "candidate": false
   }

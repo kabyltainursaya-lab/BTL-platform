@@ -351,10 +351,23 @@ function coverHTML(book, authorName) {
   '</div>';
 }
 
+// Free reading source for a public-domain book, from "freeRead" in
+// books.json, for example:
+//   "freeRead": { "name": "Standard Ebooks",
+//                 "url": "https://standardebooks.org/ebooks/mary-shelley/frankenstein" }
+// "note" is optional: extra info shown in the credit line.
+// Returns the object only if it is safe to show: the book must be public
+// domain AND the url must be a real https:// link. Otherwise null.
+function freeReadSource(book) {
+  const free = book.freeRead;
+  if (book.publicDomain !== true || !free) return null;
+  if (!hasText(free.name) || !hasText(free.url) || !free.url.startsWith('https://')) return null;
+  return free;
+}
+
 // The "where can I read it?" button for a book:
-//  - public-domain book ("publicDomain": true) with a real link in
-//    "freeText" → "Read it free" (e.g. Project Gutenberg)
-//  - public-domain book whose link we haven't checked yet → no button
+//  - public-domain book with a checked "freeRead" link → "Read it free"
+//  - public-domain book without a checked link yet → no button
 //  - book still under copyright ("publicDomain": false) → "Find this book":
 //    an Open Library search for the title and author.
 //    We NEVER link to free copies of books that are still under copyright.
@@ -363,12 +376,33 @@ function bookLinkButton(book, authorName, extraClass) {
   const cls = 'btn' + (extraClass ? ' ' + extraClass : '');
   const newTab = icon('external') + '<span class="visually-hidden"> (opens in a new tab)</span>';
   if (book.publicDomain === true) {
-    return hasText(book.freeText) && book.freeText.startsWith('http')
-      ? '<a class="' + cls + '" href="' + escapeHTML(book.freeText) + '" target="_blank" rel="noopener">Read it free ' + newTab + '</a>'
+    const free = freeReadSource(book);
+    return free
+      ? '<a class="' + cls + '" href="' + escapeHTML(free.url) + '" target="_blank" rel="noopener">Read it free ' + newTab + '</a>'
       : '';
   }
   const search = 'https://openlibrary.org/search?q=' + encodeURIComponent(book.title + ' ' + authorName);
   return '<a class="' + cls + '" href="' + search + '" target="_blank" rel="noopener">Find this book ' + newTab + '</a>';
+}
+
+// The small credit line under the "Read it free" button:
+// "Public-domain text from Standard Ebooks."
+// With a note: "Public-domain text from Wikisource (1901 edition)."
+// No free link → '' (nothing is shown).
+function freeReadCreditHTML(book) {
+  const free = freeReadSource(book);
+  if (!free) return '';
+  const note = hasText(free.note) ? ' (' + escapeHTML(free.note) + ')' : '';
+  return '<p class="free-read-credit">Public-domain text from ' + escapeHTML(free.name) + note + '.</p>';
+}
+
+// The first sentence of a text, for short previews (author cards).
+// A sentence ends at . ! or ? followed by a space (or the end), but only
+// if the character before it is a small letter, a digit, a bracket or a
+// closing quote. That way initials like "H. G. Wells" don't cut it short.
+function firstSentence(text) {
+  const match = text.match(/^.*?[a-z0-9)”’"'][.!?](?=\s|$)/);
+  return match ? match[0] : text;
 }
 
 // A public-domain illustration for a book, with its caption and source.
@@ -528,7 +562,7 @@ function apaCitation(res) {
    {
      "books":     ["frankenstein"],
      "episodes":  ["ep1"],
-     "resources": ["aldini-1803"],
+     "resources": ["aldini-1803-scans"],
      "done":      ["episodes:ep1"]   ← marked as watched / read (Step 6)
    }
    ------------------------------------------------------------- */

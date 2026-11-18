@@ -945,6 +945,42 @@ img.author-pic { object-fit: cover; object-position: top; }   /* crop photos nea
 .author-card .tag { align-self: flex-start; margin-top: 6px; }
 .portrait-source { font-size: 13px; color: var(--muted); margin-top: 8px; }
 
+/* First sentence of the bio on each author card */
+.author-card-bio {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* ---- "Did you know?" box on author pages ----
+   Like a note slipped into a book: paper card, thin border,
+   a gold line on the left and a serif italic label. */
+.fun-fact {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+.fun-fact p { margin: 0; }
+.fun-fact .fun-fact-label {
+  margin-bottom: 6px;
+  font-family: var(--font-head);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--burgundy);
+}
+
+/* "Public-domain text from Standard Ebooks." under the Read it free button */
+.free-read-credit {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
 /* ---- Book illustration (public-domain engraving, e.g. Frankenstein) ----
    A framed picture with a caption, like a plate in an old book. */
 .book-figure {

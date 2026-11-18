@@ -58,7 +58,7 @@ only allow `fetch()` when the page comes from a **server**:
 | `404.html` | Friendly "page not found". GitHub Pages shows it automatically for addresses that don't exist. |
 | `data/team.json` | Our team: name, role and `photo` path (empty = paper card with initials). |
 | `js/about.js` | Builds the "Meet the team" cards from `team.json`. |
-| `data/quotes.json` | Quotes for "Quote of the day". Copied word for word from the 1831 *Frankenstein* (Project Gutenberg #42324), with the chapter. |
+| `data/quotes.json` | Quotes for "Quote of the day". Copied word for word from the 1831 *Frankenstein*, with the chapter. All 6 were re-checked on 18 Nov against the 1831 edition on Wikisource. |
 | `data/books.json` | Our books. `author` holds an author **id** (like `"mary-shelley"`), which links to `authors.json`. |
 | `data/authors.json` | Our authors. `portrait` is empty when there's no public-domain picture (we'll show an initials card). |
 | `data/episodes.json` | Our episodes, with show notes and quiz questions. `status` = `published`, `in-production` or `coming-soon`. |
@@ -102,7 +102,7 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 **TODOs left for us in the data**
 - All `summary`, `bio` and `note` fields.
 - Ep1: literary technique, modern echo, synthesis (after we confirm the wording), quiz model answer, Google Form links.
-- Gutenberg links for the candidate books (the site was down on 17 Nov).
+- ~~Gutenberg links for the candidate books~~ → replaced on 18 Nov by one checked `freeRead` link per book (Standard Ebooks or Wikisource). See "Update 18 Nov (night)".
 - `galvani-1792-account`: check the author; `ure-1818-linda-hall`: check the year; `piccolino-1998`: verify the DOI; `piccolino-2006`: add issue and pages.
 - Subjects for candidate books are **suggestions**: check them.
 
@@ -276,7 +276,7 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 - **Colour contrast** (WCAG, at least 4.5 : 1 for text): 4 pairs were too light and were fixed (grey text on pink/green cards, faded "coming soon" cards, search-box hint text).
 - **Accessibility audit** of all 11 finished pages: every image has alt text, every link/button has a readable name, one `<h1>` per page, no skipped heading levels.
 - **Console**: no JavaScript errors and no missing files on any page.
-- **Links**: 6 of 10 open (code 200). The 4 Project Gutenberg links returned 503 because Gutenberg was down for maintenance; their content was checked on Gutenberg's official mirror (#42324 = 1831 Frankenstein, #41445 = 1818 edition, #57267 = Aldini 1803). **We still open every link ourselves once before the fair.**
+- **Links**: 6 of 10 open (code 200). The 4 Project Gutenberg links returned 503 because Gutenberg was down for maintenance; their content was checked on Gutenberg's official mirror (#42324 = 1831 Frankenstein, #41445 = 1818 edition, #57267 = Aldini 1803). **We still open every link ourselves once before the fair.** *(Outdated: all Gutenberg links were replaced on 18 Nov (night), see that update.)*
 
 ---
 
@@ -293,7 +293,7 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 3. Draws the cover with `coverHTML()`, the same building block as the Library, so the cover looks the same everywhere.
 4. Subject tags are links to `library.html?subject=…`.
 5. Episodes come from `episodesForBook()`. "Coming soon" episodes are skipped.
-6. "Read it free" only appears if `freeText` is a real link (public-domain books only).
+6. "Read it free" only appears if the book has a checked `freeRead` link (public-domain books only). *(Changed 18 Nov: this used to be `freeText`.)*
 7. The summary is hidden while it still says `TODO`. When we write it in `books.json`, it appears here by itself.
 
 **Layout**: laptop = 3 columns (cover | info | episodes); tablet = episodes move under the cover; phone = everything stacked.
@@ -329,7 +329,7 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 **New fields in `books.json`**
 | Field | Meaning |
 |---|---|
-| `publicDomain` | `true` = free to read (out of copyright) → "Read it free" button if `freeText` is a real link. `false` = still under copyright → "Find this book" button (Open Library search), never a free copy. |
+| `publicDomain` | `true` = free to read (out of copyright) → "Read it free" button if `freeRead` has a real link *(was `freeText` until 18 Nov)*. `false` = still under copyright → "Find this book" button (Open Library search), never a free copy. |
 | `collections` | Optional list, e.g. `["Women writers & science"]`. Every collection name appears in the Library's Collection menu and as a chip, all by itself. |
 | `pairsWith` + `pairingNote` | Optional: book ids that go well with this one, and why. Shows the "Pairs well with" box. |
 | `illustration`, `illustrationAlt`, `illustrationCaption`, `illustrationSource` | Optional public-domain picture (see the images guide below). |
@@ -337,7 +337,7 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 **New field in `authors.json`**: `realName` (optional), for pen names. George Eliot's page now says "Pen name of Mary Ann Evans".
 
 **What was checked**
-- Project Gutenberg numbers: **#1952 = *The Yellow Wallpaper*, Charlotte Perkins Gilman** and **#2165 = *The Lifted Veil*, George Eliot**. gutenberg.org itself gave error 503 on 18 Nov (down again), so this was checked on Gutenberg's official mirror (gutenberg.pglaf.org). **We open both links ourselves once.**
+- Project Gutenberg numbers: **#1952 = *The Yellow Wallpaper*, Charlotte Perkins Gilman** and **#2165 = *The Lifted Veil*, George Eliot**. gutenberg.org itself gave error 503 on 18 Nov (down again), so this was checked on Gutenberg's official mirror (gutenberg.pglaf.org). **We open both links ourselves once.** *(Outdated: replaced by Wikisource links on 18 Nov (night).)*
 - The Open Library search for *The Immortal Life of Henrietta Lacks* works and finds Rebecca Skloot's book.
 - All JSON files load; every portrait file exists; every book's author id exists; no copyrighted book has a free-read link.
 - Pages tested in Chrome: Library (with and without the collection), the 3 new book pages, Frankenstein, Episode 1, Authors, George Eliot, Rebecca Skloot, Home. No error messages and no broken images.
@@ -376,6 +376,62 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
   - `ONLY_WITH_PORTRAIT = true`: only authors with a portrait take turns, so Home never shows an initials card. Right now that's 6 authors: Mary Shelley, Poe, Eliot, Stevenson, Gilman, Wells. 6 × 2 hours = everyone is shown once every 12 hours.
 - **How it decides (for the judges):** `Date.now()` is the number of milliseconds since 1 January 1970. We divide it by the length of 2 hours to get a "block number" that goes up by 1 every 2 hours. `blockNumber % 6` (the remainder) is always 0–5, which picks one author from the list. Every visitor in the same 2 hours sees the same author; no storage needed.
 - Add a portrait to an author in `authors.json` → they join the rotation by themselves.
+
+**Our notes (write here)**
+-
+
+---
+
+## Update 18 Nov (night): Author bios and one free-reading source
+
+### 1. Author bios and "Did you know?"
+- Every author in `data/authors.json` now has a `bio` and a new `funFact` field, copied **exactly** from the texts we wrote (no facts added or changed).
+- **Author page** (`author.html?id=…`): the full bio, then a small **"Did you know?"** box with the fun fact (paper card, gold line on the left, Playfair italic label). Code: `js/author.js`; style: `.fun-fact` in `css/style.css`.
+- **Authors page** (`authors.html`): each card now shows the **first sentence** of the bio. Code: `js/authors.js` + `firstSentence()` in `js/app.js`.
+- Both hide themselves if the text is empty or starts with `TODO` (`hasText()`), like everything else.
+
+**How `firstSentence()` works (for the judges):** it looks for the first `.`, `!` or `?` that comes right after a small letter, a number, a bracket or a closing quote, and is followed by a space. So "Wells studied … “Darwin’s Bulldog”." ends at the right place, but "H. G. Wells" is not cut after "H." (a capital letter comes before that dot).
+
+### 2. One reliable "Read it free" source (Project Gutenberg removed)
+Project Gutenberg was down several times while we built the site (error 503), so every Gutenberg link is gone from the site. Each public-domain book now has **one** checked link in a new field:
+
+```json
+"freeRead": { "name": "Standard Ebooks", "url": "https://standardebooks.org/ebooks/mary-shelley/frankenstein" }
+```
+
+- `name` = the website, shown in the credit under the button: *"Public-domain text from Standard Ebooks."*
+- `url` = the book's **main page** on that site (never a deep `/text` link). Must start with `https://`.
+- `note` (optional) = extra info in the credit, e.g. *"Public-domain text from Wikisource (1901 edition)."*
+- **Rule:** Standard Ebooks first (beautifully edited, free). If the book isn't there → Wikisource.
+- Books still under copyright (*Flowers for Algernon*, *The Stand*, *Henrietta Lacks*) have **no** `freeRead`; they keep the "Find this book" button (Open Library search).
+- The old `freeText` field is gone. `freeReadSource()` in `app.js` checks the link, `bookLinkButton()` draws the button, `freeReadCreditHTML()` draws the credit (book page + Featured book on Home).
+
+**What Claude checked on 18 Nov (every link was opened and its content read, not just "does it load"):**
+
+| Book | Source | What was checked |
+|---|---|---|
+| *Frankenstein* | Standard Ebooks | Page exists; their edition "is based on Shelley’s revised 1831 edition". |
+| *The Tell-Tale Heart* | Standard Ebooks | Not a separate book there. It is inside Poe’s **Short Fiction** collection, spelled "The Telltale Heart" (seen in the table of contents). So the link goes to that collection, and the credit says so. |
+| *Jekyll and Hyde* | Standard Ebooks | Page exists (their title: *The Strange Case of Dr. Jekyll and Mr. Hyde*). |
+| *The Time Machine* | Standard Ebooks | Page exists. |
+| *The Yellow Wallpaper* | **Wikisource** | Not on Standard Ebooks (they only have other Gilman books, e.g. *Herland*). Wikisource has a proofread "featured text" from a **1901** edition (with a free audio reading). |
+| *The Lifted Veil* | **Wikisource** | ⚠️ Standard Ebooks has a page for Eliot’s *Short Fiction*, but it says *"We don’t have this ebook in our catalog yet"*, so it can't be used. On Wikisource, the 1859 magazine version doesn't exist yet; the **1878 Cabinet Edition** (revised by Eliot herself) does, so the link goes there. |
+
+Nothing had to be left out, so there is no "free-read TODO" list.
+
+### 3. Resources that used Gutenberg (`data/resources.json`)
+| Resource | Before | Now |
+|---|---|---|
+| `shelley-1831-introduction` | Gutenberg #42324 | Wikisource, *Frankenstein* (Revised Edition, 1831). Its first chapter is Shelley's Introduction. |
+| `shelley-1818-text` | Gutenberg #41445 | Wikisource, *Frankenstein* (First Edition, 1818), all 3 volumes. |
+| `aldini-1803` | Gutenberg #57267 | **Removed** (also from Episode 1 in `episodes.json`). Wikisource doesn't have this book. Episode 1 still has `aldini-1803-scans`: the same 1803 book as original page scans (Wellcome Collection). |
+
+For these two Frankenstein resources we chose Wikisource (not Standard Ebooks) on purpose: a citation must point to the **exact edition** (1818 or 1831), and Wikisource transcribes those original printings page by page. Standard Ebooks modernises the text a little.
+
+**TODOs for us**
+- [ ] Open the 6 "Read it free" links and the 2 new Wikisource resource links ourselves once.
+- [ ] Gilman fun fact: in *Why I Wrote The Yellow Wallpaper* (1913), Gilman wrote that she had **heard** the doctor changed his treatment after reading her story. Our text says "later wrote that it made him change his treatment". Decide if we want to say "later wrote that she heard it made him change…" to be extra precise for the judges. (Claude did not change it: it's our text.)
+- [ ] Optional: the bios mention book titles in plain text (not italics). That's fine for now.
 
 **Our notes (write here)**
 -
@@ -463,12 +519,12 @@ The judges will probably ask "How does it work?" Each task proves we can answer.
 - [ ] **Step 3:** Add one real book to `data/books.json` (copy a `{ … }` record, give it a new unique `id`, `"candidate": true`, an `author` id that exists in `authors.json`). Before checking, predict the 5+ places it will appear.
 - [ ] **Step 4:** Add a 4th multiple-choice question to Episode 1's `"quiz"`, based on our real research. Remember: `"answer": 0` = the FIRST option. Test that the green answer is the right one.
 - [ ] **Step 5:** Add one real resource to the END of `data/resources.json`, with a link we opened and checked. Then check: is it first under "Newest resources" in the Quick search card on Home? Is its APA citation correct?
-- [ ] **Home update:** In `js/home.js`, set `FEATURED_BOOK_ID` to `'flowers-for-algernon'`. What changes on the card (cover colour, subjects, episode)? Why is there no "Read it free" button now? (Hint: look at `freeText` in `books.json`.)
+- [ ] **Home update:** In `js/home.js`, set `FEATURED_BOOK_ID` to `'flowers-for-algernon'`. What changes on the card (cover colour, subjects, episode)? Why is there a "Find this book" button instead of "Read it free"? (Hint: look at `publicDomain` in `books.json`, and notice it has no `freeRead`.)
 - [ ] **Collections:** Add `"collections": ["Women writers & science"]` to one more real book by a woman writer (or start a new collection on another book, e.g. `"Victorian science"`). Predict: where does the new name appear without changing any HTML or JavaScript?
 - [ ] **Step 6:** Each of us writes a real review of *Frankenstein* (or *Flowers for Algernon*) in `data/reviews.json`. Check the stars and average on the book page. 
 
 ### Before the fair (checklist)
-- [ ] Open every resource link once ourselves (especially the 4 Gutenberg links).
+- [ ] Open every resource link once ourselves, and every "Read it free" link (6 books).
 - [ ] When we've chosen our photos: add them to `images/` and fill in `"photo"` in `data/team.json` (see the images guide).
 - [ ] Write the TODOs we want visible: summaries, bios, resource notes, Ep1 show notes, quiz model answer.
 - [ ] Add the Google Form links in `"quizForms"` (the buttons appear by themselves).

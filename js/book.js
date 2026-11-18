@@ -60,6 +60,8 @@ function bookDetailsHTML(book, data) {
         '<h2 class="section-title" style="margin-top:24px">Summary</h2>' +
         (hasText(book.summary) ? '<p>' + escapeHTML(book.summary) + '</p>' : '<p class="meta">Summary coming soon.</p>') +
         '<div class="row" style="margin-top:20px">' + saveButton('books', book.id) + doneButton('books', book.id) + freeButton + '</div>' +
+        // "Public-domain text from Standard Ebooks." (only under a Read it free button)
+        freeReadCreditHTML(book) +
       '</div>' +
     '</article>';
 }

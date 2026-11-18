@@ -279,6 +279,7 @@ function showFeaturedBook(data) {
           freeButton +
           saveButton('books', book.id) +
         '</div>' +
+        freeReadCreditHTML(book) +   // "Public-domain text from …" (app.js)
       '</div>' +
 
       '<div class="book-feature-episodes">' +

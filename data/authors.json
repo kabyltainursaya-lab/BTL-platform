@@ -5,7 +5,8 @@
     "born": 1797,
     "died": 1851,
     "country": "England",
-    "bio": "TODO: 2–3 sentences written by the students.",
+    "bio": "Daughter of the feminist writer Mary Wollstonecraft and the philosopher William Godwin, Mary Shelley began Frankenstein at just 18, during a stormy summer near Geneva when Lord Byron challenged his guests to write ghost stories. It was published anonymously in 1818. She later wrote The Last Man (1826), one of the first novels about a global pandemic.",
+    "funFact": "1816, the summer she started the book, was called “the year without a summer” because a volcanic eruption cooled the whole planet.",
     "portrait": "images/mary-shelley.jpg",
     "portraitSource": "Richard Rothwell, oil portrait (public domain)"
   },
@@ -15,7 +16,8 @@
     "born": 1927,
     "died": 2014,
     "country": "United States",
-    "bio": "TODO: 2–3 sentences written by the students.",
+    "bio": "An American writer and English teacher, Keyes worked as an editor at a science-fiction magazine before writing Flowers for Algernon. It won the Hugo Award as a short story (1960) and the Nebula Award as a novel (1966 edition).",
+    "funFact": "The story is told entirely through the main character’s progress reports, so the spelling and grammar change as his intelligence does.",
     "portrait": "",
     "portraitSource": ""
   },
@@ -25,7 +27,8 @@
     "born": 1809,
     "died": 1849,
     "country": "United States",
-    "bio": "TODO: 2–3 sentences written by the students.",
+    "bio": "An American poet and short-story writer, Poe is credited with inventing the modern detective story and perfecting psychological horror in tales like The Tell-Tale Heart (1843). He was fascinated by science, and in Eureka (1848) he even speculated about the origin of the universe.",
+    "funFact": "In Eureka, Poe offered an explanation for why the night sky is dark, an idea astronomers still discuss.",
     "portrait": "images/poe.jpg",
     "portraitSource": "Wikimedia Commons, File:Edgar_Allan_Poe,_circa_1849,_restored,_squared_off.jpg"
   },
@@ -35,7 +38,8 @@
     "born": 1850,
     "died": 1894,
     "country": "Scotland",
-    "bio": "TODO: 2–3 sentences written by the students.",
+    "bio": "A Scottish writer from a famous family of lighthouse engineers, Stevenson studied engineering at the University of Edinburgh before turning to writing. Strange Case of Dr Jekyll and Mr Hyde (1886) began with a nightmare and became a lasting symbol of the divided human mind.",
+    "funFact": "His family’s lighthouses still guide ships around the Scottish coast today.",
     "portrait": "images/stevenson.jpg",
     "portraitSource": "Wikimedia Commons, File:Robert_Louis_Stevenson_1885.jpg"
   },
@@ -45,7 +49,8 @@
     "born": 1866,
     "died": 1946,
     "country": "England",
-    "bio": "TODO: 2–3 sentences written by the students.",
+    "bio": "An English writer often called a father of science fiction, Wells studied biology under Thomas Henry Huxley, the scientist known as “Darwin’s Bulldog”. His novels The Time Machine (1895) and The War of the Worlds (1898) used real science to imagine the future.",
+    "funFact": "In The World Set Free (1914), Wells imagined “atomic bombs” decades before they existed.",
     "portrait": "images/wells.jpg",
     "portraitSource": "Wikimedia Commons, File:H_G_Wells_pre_1922.jpg"
   },
@@ -55,7 +60,8 @@
     "born": 1947,
     "died": null,
     "country": "United States",
-    "bio": "TODO: 2–3 sentences written by the students.",
+    "bio": "Often called the “King of Horror”, Stephen King taught high-school English before his first novel, Carrie (1974), made him famous. In The Stand (1978), a man-made flu virus escapes a laboratory and devastates the world.",
+    "funFact": "His memoir On Writing (2000) is one of the most popular guides for young writers.",
     "portrait": "",
     "portraitSource": "No photo: living author. Initials card only."
   },
@@ -65,7 +71,8 @@
     "born": 1860,
     "died": 1935,
     "country": "United States",
-    "bio": "TODO: 2–3 sentences written by the students.",
+    "bio": "An American writer and women’s-rights lecturer, Gilman based The Yellow Wallpaper (1892) on her own experience of the “rest cure”, a treatment that banned women from reading, writing and working. She also wrote Herland (1915), a utopian novel about a society of women.",
+    "funFact": "Gilman sent her story to the doctor who had prescribed her rest cure and later wrote that it made him change his treatment.",
     "portrait": "images/gilman.jpg",
     "portraitSource": "Wikimedia Commons, File:Charlotte_Perkins_Gilman_3.jpg"
   },
@@ -76,7 +83,8 @@
     "born": 1819,
     "died": 1880,
     "country": "England",
-    "bio": "TODO: 2–3 sentences written by the students.",
+    "bio": "“George Eliot” was the pen name of Mary Ann Evans, who used a male name so her work would be taken seriously. Her partner, George Henry Lewes, wrote about physiology, and science runs through her fiction, from the medical reformer Dr Lydgate in Middlemarch to the eerie revival scene in The Lifted Veil (1859).",
+    "funFact": "The Lifted Veil is unusual for Eliot: a dark, almost science-fiction story told in the first person.",
     "portrait": "images/eliot.jpg",
     "portraitSource": "Wikimedia Commons, File:George_Eliot,_por_François_D'Albert_Durade.jpg"
   },
@@ -86,7 +94,8 @@
     "born": 1972,
     "died": null,
     "country": "United States",
-    "bio": "TODO: 2–3 sentences written by the students.",
+    "bio": "An American science writer, Skloot first heard about Henrietta Lacks at 16 in a community-college biology class, and spent about a decade researching her story. The Immortal Life of Henrietta Lacks (2010) became a bestseller and raised worldwide questions about medical ethics and consent.",
+    "funFact": "She set up the Henrietta Lacks Foundation to support people affected by medical research done without their consent.",
     "portrait": "",
     "portraitSource": "No photo: living author. Initials card only."
   }

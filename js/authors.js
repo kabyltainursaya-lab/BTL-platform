@@ -33,6 +33,9 @@ async function startAuthors() {
       '<h2>' + escapeHTML(author.name) + '</h2>' +
       '<span class="meta">' + lifeYears(author) + ' · ' + escapeHTML(author.country) + '</span>' +
       '<span class="meta">' + books.length + (books.length === 1 ? ' book' : ' books') + ' in our library</span>' +
+      // First sentence of the bio as a short preview (firstSentence() is in app.js).
+      // Hidden while the bio is empty or still says TODO.
+      (hasText(author.bio) ? '<p class="author-card-bio">' + escapeHTML(firstSentence(author.bio)) + '</p>' : '') +
       (onlyProposed ? '<span class="tag tag-cream">Proposed</span>' : '') +
     '</a>';
   }).join('') + '</div>';

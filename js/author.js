@@ -55,6 +55,13 @@ async function startAuthor() {
         '</dl>' +
         '<h2 class="section-title">Biography</h2>' +
         (hasText(author.bio) ? '<p>' + escapeHTML(author.bio) + '</p>' : '<p class="meta">Biography coming soon.</p>') +
+        // "Did you know?" box: only if "funFact" in authors.json has real text
+        (hasText(author.funFact)
+          ? '<aside class="fun-fact" aria-label="Did you know?">' +
+              '<p class="fun-fact-label">Did you know?</p>' +
+              '<p>' + escapeHTML(author.funFact) + '</p>' +
+            '</aside>'
+          : '') +
       '</div>' +
     '</article>' +
     '<section class="shelf section" aria-labelledby="books-title">' +

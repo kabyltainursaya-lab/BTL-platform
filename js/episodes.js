@@ -29,6 +29,18 @@ function episodeCardHTML(ep) {
   if (ep.status === 'coming-soon') {
     return '<div class="card episode-card is-soon">' + inside + '</div>';
   }
+  // Episode with a video ("youtubeId"): YouTube thumbnail on top and a
+  // "Watch now" button. The whole card is ONE link to the episode page,
+  // so "Watch now" is a <span> that looks like a button (a link can't
+  // contain another link).
+  const videoId = episodeVideoId(ep);   // app.js
+  if (videoId) {
+    return '<a class="card episode-card episode-link has-video" href="' + pageUrl('episodes', ep.id) + '">' +
+      episodeThumbHTML(videoId) + inside +
+      '<span class="episode-watch"><span class="btn">Watch now</span></span>' +
+    '</a>';
+  }
+
   // Otherwise: the whole card is a link, with a round arrow
   return '<a class="card episode-card episode-link" href="' + pageUrl('episodes', ep.id) + '">' +
     '<span class="arrow-btn" aria-hidden="true">' + icon('arrow') + '</span>' + inside +

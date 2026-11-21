@@ -55,8 +55,9 @@ function showGreeting() {
 
 
 /* -------------------------------------------------------------
-   2. LATEST EPISODE
-   Rule: the newest PUBLISHED episode (highest number).
+   2. LATEST EPISODE(S)
+   Rule: the newest PUBLISHED episodes with a video (up to 2), each
+   with its YouTube thumbnail and a "Watch now" button.
    If nothing is published yet, the first episode IN PRODUCTION.
    ------------------------------------------------------------- */
 function pickLatestEpisode(episodes) {
@@ -71,8 +72,46 @@ function pickLatestEpisode(episodes) {
   return inProduction[0];
 }
 
+// Episodes we can watch right now: published AND with a "youtubeId".
+// Newest first, at most 2, so the card stays small.
+function watchableEpisodes(episodes) {
+  return episodes
+    .filter(function (ep) { return ep.status === 'published' && episodeVideoId(ep); })
+    .sort(function (a, b) { return b.number - a.number; })
+    .slice(0, 2);
+}
+
+// One episode in the card: YouTube thumbnail | Episode N, title, "Watch now"
+function watchItemHTML(ep, data) {
+  const book = findById(data.books, ep.book);
+  const href = pageUrl('episodes', ep.id);
+  return '<li class="watch-item">' +
+    // The picture is a second link to the same page, so it is hidden from
+    // the keyboard and screen readers (the title link says the same)
+    '<a class="watch-thumb" href="' + href + '" tabindex="-1" aria-hidden="true">' + episodeThumbHTML(episodeVideoId(ep)) + '</a>' +
+    '<div class="watch-info">' +
+      '<span class="pill pill-light">Episode ' + ep.number + '</span>' +
+      '<h3 class="watch-title"><a href="' + href + '">' + escapeHTML(ep.title) + '</a></h3>' +
+      (book ? '<p class="episode-book"><em>' + escapeHTML(book.shortTitle) + '</em></p>' : '') +
+      '<a class="btn btn-small" href="' + href + '">Watch now</a>' +
+    '</div>' +
+  '</li>';
+}
+
 function showLatestEpisode(data) {
   const box = document.getElementById('latest-episode');
+
+  // Published episodes with a video → thumbnails + "Watch now"
+  const watchable = watchableEpisodes(data.episodes);
+  if (watchable.length > 0) {
+    document.getElementById('latest-label').textContent = watchable.length > 1 ? 'Latest episodes' : 'Latest episode';
+    box.innerHTML = '<ul class="watch-list">' +
+      watchable.map(function (ep) { return watchItemHTML(ep, data); }).join('') +
+    '</ul>';
+    return;
+  }
+
+  // No video yet → the old card: the first episode in production
   const ep = pickLatestEpisode(data.episodes);
   if (!ep) {
     box.innerHTML = '<p>No episodes yet.</p>';

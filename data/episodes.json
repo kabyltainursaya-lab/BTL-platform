@@ -5,8 +5,8 @@
     "title": "What did science actually believe was possible in 1818?",
     "book": "frankenstein",
     "discipline": "History of Science",
-    "status": "in-production",
-    "youtube": "",
+    "status": "published",
+    "youtubeId": "hQqT62hzt1k",
     "duration": "",
     "showNotes": {
       "concept": "Galvanism, early experiments that used electricity to make the muscles of dead animals move.",
@@ -26,9 +26,10 @@
       "piccolino-1998",
       "ure-1818-linda-hall"
     ],
+    "quizUrl": "https://docs.google.com/forms/d/e/1FAIpQLSemTSTKjh8mxHSpD8GcWPSI0GcZtAJJ74H1ilgx1DtxPNQBew/viewform",
     "quizForms": {
-      "before": "TODO: Google Form link (before watching)",
-      "after": "TODO: Google Form link (after watching)"
+      "before": "https://docs.google.com/forms/d/e/1FAIpQLSfwnSOOm4wvWC9en3lKbehP4m9ENCs959iy62VKDZtijooFbg/viewform",
+      "after": "https://docs.google.com/forms/d/e/1FAIpQLSemTSTKjh8mxHSpD8GcWPSI0GcZtAJJ74H1ilgx1DtxPNQBew/viewform"
     },
     "quiz": [
       {
@@ -60,8 +61,8 @@
     "title": "Can a mind really rewire itself overnight?",
     "book": "flowers-for-algernon",
     "discipline": "Neuroscience",
-    "status": "in-production",
-    "youtube": "",
+    "status": "published",
+    "youtubeId": "LMMPrvSPhYM",
     "duration": "",
     "showNotes": {
       "concept": "TODO",
@@ -71,7 +72,11 @@
     },
     "transcript": "",
     "resources": [],
-    "quizForms": { "before": "", "after": "" },
+    "quizUrl": "https://docs.google.com/forms/d/e/1FAIpQLSfXTIN9bzPYr_o9rzLyjH-HymFNSEefz8LhQuyDSUc6otKRNw/viewform",
+    "quizForms": {
+      "before": "https://docs.google.com/forms/d/e/1FAIpQLSeuZ-EXjvO0fC0PAETE61fy30RWDusIoknSSX_vD5TOOC8SCQ/viewform",
+      "after": "https://docs.google.com/forms/d/e/1FAIpQLSfXTIN9bzPYr_o9rzLyjH-HymFNSEefz8LhQuyDSUc6otKRNw/viewform"
+    },
     "quiz": []
   },
   {
@@ -81,7 +86,7 @@
     "book": "the-yellow-wallpaper",
     "discipline": "TBA",
     "status": "coming-soon",
-    "youtube": "",
+    "youtubeId": "",
     "duration": "",
     "showNotes": { "concept": "", "technique": "", "echo": "", "synthesis": "" },
     "transcript": "",
@@ -96,7 +101,7 @@
     "book": "the-lifted-veil",
     "discipline": "TBA",
     "status": "coming-soon",
-    "youtube": "",
+    "youtubeId": "",
     "duration": "",
     "showNotes": { "concept": "", "technique": "", "echo": "", "synthesis": "" },
     "transcript": "",
@@ -111,7 +116,7 @@
     "book": "immortal-life-of-henrietta-lacks",
     "discipline": "TBA",
     "status": "coming-soon",
-    "youtube": "",
+    "youtubeId": "",
     "duration": "",
     "showNotes": { "concept": "", "technique": "", "echo": "", "synthesis": "" },
     "transcript": "",
@@ -126,7 +131,7 @@
     "book": "",
     "discipline": "TBA",
     "status": "coming-soon",
-    "youtube": "",
+    "youtubeId": "",
     "duration": "",
     "showNotes": { "concept": "", "technique": "", "echo": "", "synthesis": "" },
     "transcript": "",
@@ -141,7 +146,7 @@
     "book": "",
     "discipline": "TBA",
     "status": "coming-soon",
-    "youtube": "",
+    "youtubeId": "",
     "duration": "",
     "showNotes": { "concept": "", "technique": "", "echo": "", "synthesis": "" },
     "transcript": "",
@@ -156,7 +161,7 @@
     "book": "",
     "discipline": "TBA",
     "status": "coming-soon",
-    "youtube": "",
+    "youtubeId": "",
     "duration": "",
     "showNotes": { "concept": "", "technique": "", "echo": "", "synthesis": "" },
     "transcript": "",

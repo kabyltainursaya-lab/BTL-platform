@@ -172,7 +172,7 @@ link to highlight. On a laptop it's a slim sidebar; under 900px wide the
 - **Episode page** `episode.html?id=ep1`: video, Save, 4 show-note cards, transcript (opens/closes), quiz, linked book, sources.
 - **Quiz engine** `buildQuiz()` in `app.js`.
 
-**How to publish a video**: paste the YouTube link into `"youtube"` in `episodes.json` (full link or just the 11-letter id). The "Video coming soon" box becomes a player. We use `youtube-nocookie.com`, YouTube's privacy-friendly version.
+**How to publish a video** *(updated 22 Nov)*: put the 11-character video id into `"youtubeId"` in `episodes.json` and set `"status": "published"`. The "Video coming soon" box becomes a thumbnail with a play button, and the player loads on click. Details: `HOW-WE-BUILT-IT.md`.
 
 **How to write quiz questions** (in the episode's `"quiz"` list):
 ```json
@@ -561,5 +561,5 @@ The judges will probably ask "How does it work?" Each task proves we can answer.
 - [ ] Open every resource link once ourselves, and every "Read it free" link (6 books).
 - [ ] When we've chosen our photos: add them to `images/` and fill in `"photo"` in `data/team.json` (see the images guide).
 - [ ] Write the TODOs we want visible: summaries, bios, resource notes, Ep1 show notes, quiz model answer.
-- [ ] Add the Google Form links in `"quizForms"` (the buttons appear by themselves).
+- [x] Add the Google Form links in `"quizForms"` (done 22 Nov for Episodes 1 and 2, plus `"quizUrl"`).
 - [ ] Publish (guide above), test on a phone, make the QR code.

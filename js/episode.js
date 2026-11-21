@@ -32,18 +32,60 @@ function headerHTML(ep, book, author) {
 }
 
 
-/* 2. VIDEO
-   youtube-nocookie.com is YouTube's privacy-friendly address:
-   it doesn't set tracking cookies until the visitor presses play. */
+/* 2. VIDEO ("youtubeId" in episodes.json)
+   Two stages, so the page stays fast and private:
+   1. First we show only YouTube's preview picture with our own
+      play button (a normal <button>, so it works with the keyboard too).
+   2. When the visitor clicks it, setupPlayer() swaps the picture for
+      the real YouTube player (an <iframe>) that starts playing at once.
+   youtube-nocookie.com is YouTube's privacy-friendly address.
+   Under the player: "Watch on YouTube" and "Test yourself" (only if
+   "quizUrl" is filled in). Both open in a new tab. */
 function videoHTML(ep) {
-  const id = youtubeId(ep.youtube);
+  const id = episodeVideoId(ep);   // app.js
   if (!id) {
     return '<div class="video video-soon"><span>Video coming soon</span></div>';
   }
-  return '<div class="video">' +
-    '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '" title="Video: ' + escapeHTML(ep.title) + '" ' +
-    'allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>' +
-  '</div>';
+
+  const newTab = icon('external') + '<span class="visually-hidden"> (opens in a new tab)</span>';
+  const quizButton = hasText(ep.quizUrl) && ep.quizUrl.startsWith('https://')
+    ? '<a class="btn btn-ghost" href="' + escapeHTML(ep.quizUrl) + '" target="_blank" rel="noopener">Test yourself ' + newTab + '</a>'
+    : '';
+
+  return '<section class="card player-card" id="player" aria-label="Video: Episode ' + ep.number + '">' +
+    '<div class="video" data-video-id="' + id + '" data-video-title="Between the Lines – Episode ' + ep.number + '">' +
+      '<button type="button" class="video-play">' +
+        '<img src="' + youtubeThumbUrl(id) + '" alt="" width="480" height="360">' +
+        '<span class="play-circle" aria-hidden="true">' + icon('playSolid') + '</span>' +
+        '<span class="visually-hidden">Play Episode ' + ep.number + ': ' + escapeHTML(ep.title) + '</span>' +
+      '</button>' +
+    '</div>' +
+    '<div class="row player-actions">' +
+      '<a class="btn" href="' + youtubeWatchUrl(id) + '" target="_blank" rel="noopener">Watch on YouTube ' + newTab + '</a>' +
+      quizButton +
+    '</div>' +
+  '</section>';
+}
+
+// Click on the preview → put the real YouTube player in its place.
+//   autoplay=1 → it starts at once (the visitor already pressed play)
+//   rel=0      → suggested videos at the end come from our channel
+function setupPlayer() {
+  const box = document.querySelector('.video[data-video-id]');
+  if (!box) return;   // no video on this episode
+  const button = box.querySelector('.video-play');
+
+  button.addEventListener('click', function () {
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + box.dataset.videoId + '?autoplay=1&rel=0';
+    iframe.title = box.dataset.videoTitle;   // "Between the Lines – Episode 1"
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+    // YouTube needs to know which website the player is on, or it refuses to play
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    box.replaceChildren(iframe);   // the picture and button disappear
+    iframe.focus();                // keyboard users continue inside the player
+  });
 }
 
 
@@ -167,6 +209,7 @@ async function startEpisode() {
     quizSectionHTML(ep) +
     linksHTML(ep, book, data);
 
+  setupPlayer();                                         // preview → player on click
   buildQuiz(document.getElementById('quiz'), ep.quiz);   // quiz engine from app.js
   updateSaveButtons();
 }

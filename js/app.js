@@ -50,7 +50,10 @@ const ICONS = {
   circle: '<circle cx="12" cy="12" r="8.5"/>',
   checkCircle: '<circle cx="12" cy="12" r="8.5"/><path d="M8 12.5l2.7 2.7L16 9.8"/>',
   info:     '<circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5v.5"/>',
-  arrow:    '<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>'
+  arrow:    '<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>',
+  // A filled triangle for the video play buttons (shifted right a little,
+  // so it looks centred in its circle)
+  playSolid: '<path d="M9 6.5l9 5.5-9 5.5z" fill="currentColor"/>'
 };
 
 // Returns the full <svg> code for one icon name.
@@ -485,13 +488,40 @@ function resourcesForEpisode(data, episode) {
   });
 }
 
-// Gets the 11-letter YouTube video id from what we typed in "youtube".
+// Gets the 11-letter YouTube video id from what we typed in "youtubeId".
 // Works with: "dQw4w9WgXcQ", "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 // "https://youtu.be/dQw4w9WgXcQ". Returns "" if nothing valid.
 function youtubeId(value) {
   if (!value) return '';
   const match = String(value).match(/(?:v=|youtu\.be\/|embed\/|^)([A-Za-z0-9_-]{11})(?:[?&#]|$)/);
   return match ? match[1] : '';
+}
+
+// The video id of an episode ("youtubeId" in episodes.json), checked.
+// "" = no video yet.
+function episodeVideoId(ep) {
+  return youtubeId(ep.youtubeId);
+}
+
+// YouTube's own preview picture for a video (480 × 360 pixels).
+function youtubeThumbUrl(id) {
+  return 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+}
+
+// The normal YouTube page of a video (for "Watch on YouTube").
+function youtubeWatchUrl(id) {
+  return 'https://www.youtube.com/watch?v=' + id;
+}
+
+// A small thumbnail with a cream play badge, for episode cards on the
+// Home and Episodes pages. Only <span>s inside, because these sit inside
+// a link (<a>), and a link may not contain another link or a button.
+// alt="" because the title next to it already says which episode it is.
+function episodeThumbHTML(id) {
+  return '<span class="episode-thumb">' +
+    '<img src="' + youtubeThumbUrl(id) + '" alt="" loading="lazy" width="480" height="360">' +
+    '<span class="play-badge" aria-hidden="true">' + icon('playSolid') + '</span>' +
+  '</span>';
 }
 
 // All books written by one author
